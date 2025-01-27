@@ -5,6 +5,15 @@ public class Main {
         System.out.print("Hello world");
     }
 
+    /**
+     * Calculates if there exists three consecutive datapoints where the triangle formed from 
+     * using them as vertecies has an area that exceeds the specified area threshold. 
+     *
+     * @param xCoordinates  an array of the x-coordinates for the datapoints 
+     * @param yCoordinates  an array of the y-coordinates for the datapoints
+     * @param areaThreshold the area which the triangle must exceed
+     * @return              true if the three datapoints exist, otherwise false
+     */
     public boolean LIC3(double[] xCoordinates, double[] yCoordinates, double areaThreshold){
         if(areaThreshold<0) return false;
 
