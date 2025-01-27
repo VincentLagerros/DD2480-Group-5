@@ -57,8 +57,6 @@ public class GlobalDeclarations {
 
     // Global variables
     public static class Globals {
-        private static final Globals instance = new Globals();
-
         public Parameters parameters = new Parameters();
         public double[] xCoordinates = new double[100]; // X coordinates of data points
         public double[] yCoordinates = new double[100]; // Y coordinates of data points
@@ -69,15 +67,11 @@ public class GlobalDeclarations {
         public boolean[] fuv = new boolean[15]; // Final Unlocking Vector
         public boolean launchDecision; // Launch decision
 
-        private Globals() {
+        public Globals() {
             // Initialize Logical Connector Matrix with NOTUSED
             for (Connectors[] row : lcm) {
                 Arrays.fill(row, Connectors.NOTUSED);
             }
-        }
-
-        public static Globals getInstance() {
-            return instance;
         }
     }
 
