@@ -3,21 +3,14 @@ package se.kth;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Test;
 
 public class GlobalDeclarationsTest {
 
-    @Before
-    public void setUp() {
-        GlobalDeclarations.Globals globals = GlobalDeclarations.Globals.getInstance();
-        globals.resetInstance();
-    }
     @Test
     public void testGlobalInitialization() {
-        GlobalDeclarations.Globals globals = GlobalDeclarations.Globals.getInstance();
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
         // Check arrays for coordinates
         assertEquals(100, globals.xCoordinates.length);
@@ -42,14 +35,6 @@ public class GlobalDeclarationsTest {
     }
 
     @Test
-    public void testSingletonBehavior() {
-        GlobalDeclarations.Globals instance1 = GlobalDeclarations.Globals.getInstance();
-        GlobalDeclarations.Globals instance2 = GlobalDeclarations.Globals.getInstance();
-
-        assertSame(instance1, instance2);
-    }
-
-    @Test
     public void testDoubleCompareFunction() {
         assertEquals(GlobalDeclarations.CompType.EQ, GlobalDeclarations.doubleCompare(1.0, 1.0));
         assertEquals(GlobalDeclarations.CompType.EQ, GlobalDeclarations.doubleCompare(1.0000001, 1.0000002));
@@ -63,7 +48,7 @@ public class GlobalDeclarationsTest {
 
     @Test
     public void testGlobalVariablesCorrecltyAssigned() {
-        GlobalDeclarations.Globals globals = GlobalDeclarations.Globals.getInstance();
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
         globals.numPoints = 10;
         globals.parameters.LENGTH1 = 40.0;
