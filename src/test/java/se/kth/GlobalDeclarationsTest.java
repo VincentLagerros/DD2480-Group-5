@@ -5,10 +5,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 
 public class GlobalDeclarationsTest {
 
+    @Before
+    public void setUp() {
+        GlobalDeclarations.Globals globals = GlobalDeclarations.Globals.getInstance();
+        globals.resetInstance();
+    }
     @Test
     public void testGlobalInitialization() {
         GlobalDeclarations.Globals globals = GlobalDeclarations.Globals.getInstance();

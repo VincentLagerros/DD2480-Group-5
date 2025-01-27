@@ -79,6 +79,22 @@ public class GlobalDeclarations {
         public static Globals getInstance() {
             return instance;
         }
+
+        public void resetInstance() {
+            parameters = new Parameters();
+            xCoordinates = new double[100]; // X coordinates of data points
+            yCoordinates = new double[100]; // Y coordinates of data points
+            numPoints = 0; // Number of data points
+            lcm = new Connectors[15][15]; // Logical Connector Matrix
+            pum = new boolean[15][15]; // Preliminary Unlocking Matrix
+            cmv = new boolean[15]; // Conditions Met Vector
+            fuv = new boolean[15]; // Final Unlocking Vector
+            launchDecision = false; // Launch decision
+
+            for (Connectors[] row : lcm) {
+                Arrays.fill(row, Connectors.NOTUSED);
+            }
+        }
     }
 
     // Compares floating point numbers
