@@ -10,7 +10,7 @@ import org.junit.Test;
 public class LICTest {
     @Test
     public void testLIC3Positive(){
-        Main m = new Main();
+        EvaluateLIC m = new EvaluateLIC();
         double[] x = new double[10];
         double[] y = new double[10];
         x[9]=5;
@@ -24,7 +24,7 @@ public class LICTest {
 
     @Test
     public void testLIC3NegativeForNoTriangle(){
-        Main m = new Main();
+        EvaluateLIC m = new EvaluateLIC();
         double[] x = new double[10];
         double[] y = new double[10];
         x[9]=5;
@@ -36,7 +36,7 @@ public class LICTest {
 
     @Test
     public void testLIC3NegativeForLargeAreaThreshold(){
-        Main m = new Main();
+        EvaluateLIC m = new EvaluateLIC();
         double[] x = new double[10];
         double[] y = new double[10];
         x[9]=5;
