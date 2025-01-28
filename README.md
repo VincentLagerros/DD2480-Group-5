@@ -51,6 +51,8 @@ This project is licensed under the **BSD 2-Clause License**. Permissions, condit
 - **Conditions**: The license and copyright notice must be included in all copies or substantial portions of the software.
 - **Limitations**: No warranty or liability is provided.
 
+A copy of the license is included in the repository's root directory as `LICENSE`.
+
 ---
 
 ## Getting Started
