@@ -46,10 +46,11 @@ public class LIC6Test {
 
     @Test
     public void testLIC6NeagtiveShort(){
+        // Case where numPoints < 3
         EvaluateLIC eval = new EvaluateLIC();
         double[] x = {0, 1};
         double[] y = {0, 0};
-        int numPoints = 4;
+        int numPoints = 2;
         int nPts = 3;
         double dist = 1.5;
 
