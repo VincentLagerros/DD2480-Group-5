@@ -31,12 +31,23 @@ public class EvaluateLIC {
         return false;
     }
 
-    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsthreshold){
+    /**
+     * Calculates if there is a cluster of consecutive datapoints that are in more than 
+     * quadrantThreshold different quadrants. If a datapoint is between two quadrants
+     * then priority is given to quadrant with lower number.
+     * 
+     * @param coordinates       an array of the coordinates for the datapoints
+     * @param clusterSize       the size of the cluster of consecutive coordinates
+     * @param quadsThreshold    the number of quadrants to be exceed
+     * @return                  true if a cluster of coordinates are in more quadrants than quadsThreshold,
+     *                          otherwise false
+     */
+    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsThreshold){
         assert clusterSize >=2;
         assert coordinates.length >= clusterSize;
-        assert quadsthreshold >=1;
-        assert quadsthreshold <=3;
-        if(clusterSize<=quadsthreshold) return false;
+        assert quadsThreshold >=1;
+        assert quadsThreshold <=3;
+        if(clusterSize<=quadsThreshold) return false;
 
         ArrayList<Integer> quadList = new ArrayList<Integer>();
 
@@ -56,7 +67,7 @@ public class EvaluateLIC {
 
         for(int i=0;i<=coordinates.length-clusterSize;i++){
             h.addAll(quadList.subList(i, i+clusterSize));
-            if(h.size()>quadsthreshold) return true;
+            if(h.size()>quadsThreshold) return true;
             h.clear();
         }
         return false;
