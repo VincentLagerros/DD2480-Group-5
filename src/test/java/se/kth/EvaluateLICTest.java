@@ -1,5 +1,7 @@
 package se.kth;
 
+import java.awt.geom.Point2D;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -10,6 +12,73 @@ import java.util.Arrays;
 
 // Class for all unit tests relating to LIC evaluation
 public class EvaluateLICTest {
+
+    private Point2D[] convertToPoint2DArray(int numPoints, double[] xCoordinates, double[] yCoordinates) {
+        assert xCoordinates.length == yCoordinates.length;
+        Point2D[] coordinates = new Point2D.Double[numPoints];
+        for (int i = 0; i < numPoints; i++){
+            coordinates[i] = new Point2D.Double(xCoordinates[i], yCoordinates[i]);
+        } 
+        return coordinates;
+    }
+
+  // ---------------------------------------------------- LIC0 ----------------------------------------------------
+    @Test
+    public void testLIC0TrueForDistanceGreaterThanLength1(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1, 4, 7};
+        globals.yCoordinates = new double[]{0, 0, 3, 0};
+        globals.numPoints = 4;
+        globals.parameters.LENGTH1 = 3;
+
+        assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
+    }
+
+    @Test
+    public void testLIC0FalseForAllDistancesLessThanLength1(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1, 2, 0};
+        globals.yCoordinates = new double[]{0, 1, 2, 0};
+        globals.numPoints = 4;
+        globals.parameters.LENGTH1 = 5;
+
+        assertFalse(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
+    }
+
+    @Test
+    public void testLIC0FalseForEdgeCaseEqualToLength1(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 3};
+        globals.yCoordinates = new double[]{0, 0};
+        globals.numPoints = 2;
+        globals.parameters.LENGTH1 = 3;
+
+        assertFalse(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
+    }
+
+    @Test 
+    public void testLIC0FalseForInsufficientPoints(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0};
+        globals.yCoordinates = new double[]{0}; 
+        globals.numPoints = 1;
+        globals.parameters.LENGTH1 = 0;
+
+        assertFalse(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
+    }
+
+    @Test 
+    public void testLIC0TrueForMultiplePairs(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1, 10, 15};
+        globals.yCoordinates = new double[]{0, 1, 10, 15};
+        globals.numPoints = 4;
+        globals.parameters.LENGTH1 = 1;
+
+        assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
+    }
+
+  // ---------------------------------------------------- LIC6 ----------------------------------------------------
     @Test
     public void testLIC3Positive() {
         //Case where a valid input is given

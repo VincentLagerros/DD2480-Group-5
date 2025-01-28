@@ -5,6 +5,38 @@ import java.awt.geom.Point2D;
 public class EvaluateLIC {
 
     /**
+     * 
+     * There exists at least one set of two consecutive data points that are 
+     * a distance greater than the length, LENGTH1, apart.
+     * 
+     * @param xCoordinates An array of the x-coordinates for the datapoints
+     * @param yCoordinates An array of the y-coordinates for the datapoints
+     * @param numPoints Number of datapoints
+     * @param length1 length to check against
+     * @return true if there exists two consecutive datapoints where the Euclidean 
+     *         distance dist > length1 otherwise false
+     * 
+     */
+    public static boolean LIC0(Point2D[] coordinates, double length1) {
+        assert coordinates != null;
+        assert length1 >= 0;
+        
+        if (coordinates.length < 2) {
+            return false;
+        }
+
+        for (int i = 0; i < coordinates.length - 1; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + 1];
+            double distance = pt1.distance(pt2);
+            if (distance > length1) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
      * Calculates if there exists three consecutive datapoints where the triangle formed from
      * using them as vertices has an area that exceeds the specified area threshold.
      *
@@ -26,6 +58,8 @@ public class EvaluateLIC {
 
             if (0.5 * (Math.abs(pt1.getX() * pt2.getY() + pt2.getX() * pt3.getY() + pt3.getX() * pt1.getY() - pt1.getX() * pt3.getY() - pt2.getX() * pt1.getY() - pt3.getX() * pt2.getY())) > areaThreshold)
                 return true;
+            
+            
         }
         return false;
     }
