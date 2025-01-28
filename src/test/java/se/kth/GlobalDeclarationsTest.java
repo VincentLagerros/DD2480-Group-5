@@ -12,6 +12,7 @@ public class GlobalDeclarationsTest {
     public void testGlobalInitialization() {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
+
         // Check arrays for coordinates
         assertEquals(100, globals.xCoordinates.length);
         assertEquals(100, globals.yCoordinates.length);
