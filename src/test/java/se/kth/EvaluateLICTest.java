@@ -51,6 +51,54 @@ public class EvaluateLICTest {
     }
 
     @Test
+    public void testLIC4Positive() {
+        //Case where at least one cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(-1, 2);
+        coordinates[2] = new Point2D.Double(2, 1);
+        coordinates[3] = new Point2D.Double(3, -2);
+
+        assertTrue(eval.LIC4(coordinates, 3, 2));
+        assertTrue(eval.LIC4(coordinates, 2, 1));
+        assertTrue(eval.LIC4(coordinates, 4, 2));
+    }
+    
+    @Test
+    public void testLIC4Negative() {
+        //Case where no cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 2);
+        coordinates[2] = new Point2D.Double(-2, -1);
+        coordinates[3] = new Point2D.Double(-3, -2);
+
+        assertFalse(eval.LIC4(coordinates, 3, 2));
+        assertFalse(eval.LIC4(coordinates, 4, 2));
+        assertFalse(eval.LIC4(coordinates, 4, 3));
+    }
+
+    @Test
+    public void testLIC4AxisCoordinates() {
+        //Case where coordinates lie on an axis between two quadrants
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(0, 2);
+        coordinates[2] = new Point2D.Double(-2, 0);
+        coordinates[3] = new Point2D.Double(0, -2);
+
+        assertTrue(eval.LIC4(coordinates, 2, 1));
+        assertFalse(eval.LIC4(coordinates, 4, 3));
+        assertTrue(eval.LIC4(coordinates, 3, 2));
+    }
+
+    @Test
     public void testLIC6Positive() {
         // Case where at least one point lies farther than dist from the line
         EvaluateLIC eval = new EvaluateLIC();

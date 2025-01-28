@@ -1,6 +1,8 @@
 package se.kth;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class EvaluateLIC {
 
@@ -25,6 +27,37 @@ public class EvaluateLIC {
 
             if (0.5 * (Math.abs(pt1.getX() * pt2.getY() + pt2.getX() * pt3.getY() + pt3.getX() * pt1.getY() - pt1.getX() * pt3.getY() - pt2.getX() * pt1.getY() - pt3.getX() * pt2.getY())) > areaThreshold)
                 return true;
+        }
+        return false;
+    }
+
+    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsthreshold){
+        assert clusterSize >=2;
+        assert coordinates.length >= clusterSize;
+        assert quadsthreshold >=1;
+        assert quadsthreshold <=3;
+        if(clusterSize<=quadsthreshold) return false;
+
+        ArrayList<Integer> quadList = new ArrayList<Integer>();
+
+        for(Point2D coord:coordinates){
+            if(coord.getX()>=0&&coord.getY()>=0){
+                quadList.add(1);
+            }else if(coord.getX()<0&&coord.getY()>=0){
+                quadList.add(2);
+            }else if(coord.getX()<=0){
+                quadList.add(3);
+            }else{
+                quadList.add(4);
+            }
+        }
+
+        HashSet<Integer> h = new HashSet<Integer>();
+
+        for(int i=0;i<=coordinates.length-clusterSize;i++){
+            h.addAll(quadList.subList(i, i+clusterSize));
+            if(h.size()>quadsthreshold) return true;
+            h.clear();
         }
         return false;
     }
