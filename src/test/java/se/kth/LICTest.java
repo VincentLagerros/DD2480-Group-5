@@ -4,7 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class LIC6Test {
+// Class for all unit tests relating to LIC evaluation
+public class LICTest {
     @Test
     public void testLIC6Positive(){
         // Case where at least one point lies farther than dist from the line
