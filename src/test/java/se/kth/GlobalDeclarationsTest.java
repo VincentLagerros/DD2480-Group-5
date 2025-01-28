@@ -44,10 +44,10 @@ public class GlobalDeclarationsTest {
         assertNotEquals(GlobalDeclarations.CompType.EQ, GlobalDeclarations.doubleCompare(1.0, 2.0));
         assertNotEquals(GlobalDeclarations.CompType.LT, GlobalDeclarations.doubleCompare(1.0, 1.0));
         assertNotEquals(GlobalDeclarations.CompType.GT, GlobalDeclarations.doubleCompare(1.0, 1.0));
-    }   
+    }
 
     @Test
-    public void testGlobalVariablesCorrecltyAssigned() {
+    public void testGlobalVariablesCorrectlyAssigned() {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
         globals.numPoints = 10;

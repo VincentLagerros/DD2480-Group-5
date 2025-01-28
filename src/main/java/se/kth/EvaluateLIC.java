@@ -1,35 +1,69 @@
 package se.kth;
 
+import java.awt.geom.Point2D;
+
 public class EvaluateLIC {
 
-     /**
-     * Calculates if there exists three consecutive datapoints where the triangle formed from 
-     * using them as vertecies has an area that exceeds the specified area threshold. 
-     *
-     * @param xCoordinates  an array of the x-coordinates for the datapoints 
-     * @param yCoordinates  an array of the y-coordinates for the datapoints
-     * @param areaThreshold the area which the triangle must exceed
-     * @return              true if the three datapoints exist, otherwise false
+    /**
+     * 
+     * There exists at least one set of two consecutive data points that are 
+     * a distance greater than the length, LENGTH1, apart.
+     * 
+     * @param xCoordinates An array of the x-coordinates for the datapoints
+     * @param yCoordinates An array of the y-coordinates for the datapoints
+     * @param numPoints Number of datapoints
+     * @param length1 length to check against
+     * @return true if there exists two consecutive datapoints where the Euclidean 
+     *         distance dist > length1 otherwise false
+     * 
      */
-    public boolean LIC3(double[] xCoordinates, double[] yCoordinates, double areaThreshold){
-        if(areaThreshold<0) return false;
+    public static boolean LIC0(Point2D[] coordinates, double length1) {
+        assert coordinates != null;
+        assert length1 >= 0;
+        
+        if (coordinates.length < 2) {
+            return false;
+        }
 
-        double x1, x2, x3, y1, y2, y3;
-
-        for(int i=0;i<xCoordinates.length-2;i++){
-            //get coordinates for the three datapoints
-            x1 = xCoordinates[i];
-            y1 = yCoordinates[i];
-            x2 = xCoordinates[i + 1];
-            y2 = yCoordinates[i + 1];
-            x3 = xCoordinates[i + 2];
-            y3 = yCoordinates[i + 2];
-
-            if(0.5*(Math.abs(x1*y2+x2*y3+x3*y1-x1*y3-x2*y1-x3*y2))>areaThreshold) return true;
+        for (int i = 0; i < coordinates.length - 1; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + 1];
+            double distance = pt1.distance(pt2);
+            if (distance > length1) {
+                return true;
+            }
         }
         return false;
     }
     
+    /**
+     * Calculates if there exists three consecutive datapoints where the triangle formed from
+     * using them as vertices has an area that exceeds the specified area threshold.
+     *
+     * @param coordinates   an array of the coordinates for the datapoints
+     * @param areaThreshold the area which the triangle must exceed
+     * @return true if the three datapoints exist, otherwise false
+     */
+    public boolean LIC3(Point2D[] coordinates, double areaThreshold) {
+        assert coordinates != null;
+        assert 0 <= areaThreshold;
+
+        Point2D pt1, pt2, pt3;
+
+        for (int i = 0; i < coordinates.length - 2; i++) {
+            //get coordinates for the three datapoints
+            pt1 = coordinates[i];
+            pt2 = coordinates[i + 1];
+            pt3 = coordinates[i + 2];
+
+            if (0.5 * (Math.abs(pt1.getX() * pt2.getY() + pt2.getX() * pt3.getY() + pt3.getX() * pt1.getY() - pt1.getX() * pt3.getY() - pt2.getX() * pt1.getY() - pt3.getX() * pt2.getY())) > areaThreshold)
+                return true;
+            
+            
+        }
+        return false;
+    }
+
     /**
      * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]), 
      * suchthat X[j] - X[i] < 0. (where i = j-1)
@@ -50,57 +84,99 @@ public class EvaluateLIC {
     /**
      * Calculates if there exists at least one set of nPts consecutive data points such that at least one of the
      * points lies a distance greater than dist from the line joining the first and last of these nPts points.
-     * If the first and last points of these nPts are identical, then the calculated distance 
-     * to compare with dist will be the distance from the coincident point. 
-     * The condition is not met when NumPoints < 3. 
+     * If the first and last points of these nPts are identical, then the calculated distance
+     * to compare with dist will be the distance from the coincident point.
+     * The condition is not met when NumPoints < 3.
      *
-     * @param xCoordinates  An array of the x-coordinates for the datapoints 
-     * @param yCoordinates  An array of the y-coordinates for the datapoints
-     * @param numPoints     Number of datapoints (3 ≤ nPts ≤ numPoints)
-     * @param nPts          Number of consequative points (3 ≤ nPts ≤ numPoints)
-     * @param dist          distance compated to (0 ≤ DIST)
-     * @return              True if such a point exists, False otherwise
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param nPts        Number of consecutive points (3 ≤ nPts ≤ coordinates.length)
+     * @param dist        distance computed to (0 ≤ DIST)
+     * @return True if such a point exists, False otherwise
      */
-    public boolean LIC6(double[] xCoordinates, double[] yCoordinates, int numPoints, int nPts, double dist){
-        if(numPoints < 3 || nPts > numPoints || xCoordinates.length < 3){
-            return false;
-        }
+    public boolean LIC6(Point2D[] coordinates, int nPts, double dist) {
+        assert coordinates != null;
+        assert 0 <= dist;
+        assert 3 <= nPts;
+        int numPoints = coordinates.length;
+        assert nPts <= numPoints;
 
         // Iterate over all possible consecutive nPts large groups of points
-        for(int i = 0; i <= numPoints - nPts; i++){
+        for (int i = 0; i <= numPoints - nPts; i++) {
 
             // Get the first and last points in the group
-            double x1 = xCoordinates[i];
-            double y1 = yCoordinates[i];
-            double xN = xCoordinates[i + nPts - 1];
-            double yN = yCoordinates[i + nPts - 1];
+            Point2D pt1 = coordinates[i];
+            Point2D ptN = coordinates[i + nPts - 1];
 
-            // To handle the special case when the first and last points in the grouo are identical 
-            boolean identicalPoints = (x1 == xN && y1 == yN);
+            // To handle the special case when the first and last points in the group are identical
+            boolean identicalPoints = pt1.equals(ptN);
 
             for (int j = i + 1; j < i + nPts - 1; j++) {
-                double xCurrent = xCoordinates[j];
-                double yCurrent = yCoordinates[j];
+                Point2D ptCurrent = coordinates[j];
 
                 double distance;
 
                 // special case 
-                if(identicalPoints){
-                    distance = Math.sqrt(Math.pow((xCurrent - x1), 2) + Math.pow((yCurrent - y1), 2));
+                if (identicalPoints) {
+                    distance = ptCurrent.distance(pt1);
                 }
                 // Default case 
-                else{
+                else {
                     // line on the form of ax+by+c=0 using (y1 – y2)x + (x2 – x1)y + (x1y2 – x2y1) = 0
-                    double a = y1 - yN;
-                    double b = xN - x1;
-                    double c = (x1 * yN) - (xN * y1);
+                    double a = pt1.getY() - ptN.getY();
+                    double b = ptN.getX() - pt1.getX();
+                    double c = (pt1.getX() * ptN.getY()) - (ptN.getX() * pt1.getY());
 
-                    distance = Math.abs(a*xCurrent + b*yCurrent +c) / Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+                    distance = Math.abs(a * ptCurrent.getX() + b * ptCurrent.getY() + c) / pt1.distance(ptN);
                 }
 
-                if(distance > dist){
+                if (distance > dist) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * There exists at least one set of three data points separated by exactly C_PTS and D_PTS
+     * consecutive intervening points, respectively, that form an angle such that:
+     * angle < (PI − EPSILON)
+     * or
+     * angle > (PI + EPSILON)
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param cPts        Offset to the left of the vertex in the coordinates array
+     * @param dPts        Offset to the right of the vertex
+     * @param epsilon     How far away in radians from PI (180 deg) these three points can be to not form a straight line
+     * @return If three data points can be found following the conditions
+     */
+    public boolean LIC9(Point2D[] coordinates, int cPts, int dPts, double epsilon) {
+        assert coordinates != null;
+        int numPoints = coordinates.length;
+        assert cPts >= 1;
+        assert dPts >= 1;
+        assert cPts + dPts <= numPoints - 3;
+        if (numPoints < 5) {
+            return false;
+        }
+        for (int i = cPts; i < numPoints - dPts; i++) {
+            Point2D pt1 = coordinates[i]; // vertex
+            Point2D pt2 = coordinates[i - cPts]; // left
+            Point2D pt3 = coordinates[i + dPts]; // right
+
+            // If either the first point or the last point (or both)
+            // coincide with the vertex, the angle is undefined and the LIC
+            // is not satisfied by those three points
+            if (pt1.equals(pt2) || pt1.equals(pt3)) {
+                continue;
+            }
+
+            // https://stackoverflow.com/questions/1211212/how-to-calculate-an-angle-from-three-points
+            double angle = Math.acos((pt1.distanceSq(pt2) + pt1.distanceSq(pt3) - pt2.distanceSq(pt3))
+                    / (2.0 * pt1.distance(pt2) * pt1.distance(pt3)));
+
+            if (angle < Math.PI - epsilon || angle > Math.PI + epsilon) {
+                return true;
             }
         }
         return false;
