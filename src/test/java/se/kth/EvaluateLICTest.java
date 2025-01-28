@@ -1,9 +1,11 @@
 package se.kth;
 
 import java.awt.geom.Point2D;
+import java.lang.annotation.Target;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -216,7 +218,77 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
+  // ---------------------------------------------------- LIC7 ----------------------------------------------------
+    @Test
+    public void testLIC7Positive(){
+        // Case with a set of points kPts apart are further away than length1 exists
+        EvaluateLIC eval = new EvaluateLIC();
 
+        Point2D[] coordinates = new Point2D.Double[5];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(1, 0);
+        coordinates[4] = new Point2D.Double(5, 0);
+
+        int kPts = 2;
+        double length1 = 2;
+
+        assertTrue(eval.LIC7(coordinates, kPts, length1));
+    }
+
+    @Test
+    public void testLIC7PositiveMin(){
+        // Minimal possible input
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(1, 0), 
+            new Point2D.Double(3, 0)
+        };
+        int kPts = 1;
+        double length1 = 2.0;
+        assertTrue(eval.LIC7(coordinates, kPts, length1));
+    }
+
+    @Test
+    public void testLIC7Negative(){
+        // Case where at a set of points kPts apart are further away than length1 does not exist
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[5];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(1, 0);
+        coordinates[4] = new Point2D.Double(2, 0);
+
+        int kPts = 2;
+        double length1 = 4;
+
+        assertFalse(eval.LIC7(coordinates, kPts, length1));
+    }
+
+    @Test
+    public void testLIC7NegativeShort(){
+        // Case kPts < 0 to test the assurtion
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[2];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+
+        int kPts = 0;
+        double length1 = 2;
+
+        try {
+            eval.LIC7(coordinates, kPts, length1);
+        } catch (AssertionError e) {
+            // AssertionError is expected for kPts < 1
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+    }
+
+
+  // ---------------------------------------------------- LIC9 ----------------------------------------------------
     @Test
     public void testLIC9Coincide() {
         EvaluateLIC eval = new EvaluateLIC();
