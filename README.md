@@ -1,5 +1,5 @@
 # DD2480-Group-5
-This repository includes the assignments conducted in the course *DD2480 - Software Engineering Fundamentals*. 
+This repository includes the assignments conducted in the course *DD2480 - Fundamentals of Software Engineering*. 
 
 ## Assignments
 There are four assignments:
