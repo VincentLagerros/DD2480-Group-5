@@ -10,6 +10,7 @@ import org.junit.Test;
 public class LICTest {
     @Test
     public void testLIC3Positive(){
+        //Case where a valid input is given
         EvaluateLIC m = new EvaluateLIC();
         double[] x = new double[10];
         double[] y = new double[10];
@@ -24,6 +25,7 @@ public class LICTest {
 
     @Test
     public void testLIC3NegativeForNoTriangle(){
+        //Case where no points create a triangle with area>0
         EvaluateLIC m = new EvaluateLIC();
         double[] x = new double[10];
         double[] y = new double[10];
@@ -36,6 +38,7 @@ public class LICTest {
 
     @Test
     public void testLIC3NegativeForLargeAreaThreshold(){
+        //Case where area threshold is larger than the triangle created by the points
         EvaluateLIC m = new EvaluateLIC();
         double[] x = new double[10];
         double[] y = new double[10];
