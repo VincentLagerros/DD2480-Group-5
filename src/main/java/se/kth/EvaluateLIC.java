@@ -83,4 +83,49 @@ public class EvaluateLIC {
         }
         return false;
     }
+
+    /**
+     * There exists at least one set of three data points separated by exactly C_PTS and D_PTS
+     * consecutive intervening points, respectively, that form an angle such that:
+     * angle < (PI − EPSILON)
+     * or
+     * angle > (PI + EPSILON)
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param cPts        Offset to the left of the vertex in the coordinates array
+     * @param dPts        Offset to the right of the vertex
+     * @param epsilon     How far away in radians from PI (180 deg) these three points can be to not form a straight line
+     * @return If three data points can be found following the conditions
+     */
+    public boolean LIC9(Point2D[] coordinates, int cPts, int dPts, double epsilon) {
+        assert coordinates != null;
+        int numPoints = coordinates.length;
+        assert cPts >= 1;
+        assert dPts >= 1;
+        assert cPts + dPts <= numPoints - 3;
+        if (numPoints < 5) {
+            return false;
+        }
+        for (int i = cPts; i < numPoints - dPts; i++) {
+            Point2D pt1 = coordinates[i]; // vertex
+            Point2D pt2 = coordinates[i - cPts]; // left
+            Point2D pt3 = coordinates[i + dPts]; // right
+
+            // If either the first point or the last point (or both)
+            // coincide with the vertex, the angle is undefined and the LIC
+            // is not satisfied by those three points
+            if (pt1.equals(pt2) || pt1.equals(pt3)) {
+                continue;
+            }
+
+            // https://stackoverflow.com/questions/1211212/how-to-calculate-an-angle-from-three-points
+            double angle = Math.acos((pt1.distanceSq(pt2) + pt1.distanceSq(pt3) - pt2.distanceSq(pt3))
+                    / (2.0 * pt1.distance(pt2) * pt1.distance(pt3)));
+
+            if (angle < Math.PI - epsilon || angle > Math.PI + epsilon) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
