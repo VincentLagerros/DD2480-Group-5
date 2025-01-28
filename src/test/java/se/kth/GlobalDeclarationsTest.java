@@ -12,12 +12,11 @@ public class GlobalDeclarationsTest {
     public void testGlobalInitialization() {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
-
         // Check arrays for coordinates
         assertEquals(100, globals.xCoordinates.length);
         assertEquals(100, globals.yCoordinates.length);
 
-        // Check som of the boolean arrays
+        // Check some of the boolean arrays
         for (boolean value : globals.cmv) {
             assertFalse(value);
         }
