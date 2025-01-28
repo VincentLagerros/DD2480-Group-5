@@ -3,6 +3,33 @@ package se.kth;
 public class EvaluateLIC {
 
     /**
+     * 
+     * There exists at least one set of two consecutive data points that are 
+     * a distance greater than the length, LENGTH1, apart.
+     * 
+     * @param xCoordinates An array of the x-coordinates for the datapoints
+     * @param yCoordinates An array of the y-coordinates for the datapoints
+     * @param numPoints Number of datapoints
+     * @param length1 length to check against
+     * @return true if there exists two consecutive datapoints where the Euclidean 
+     *         distance dist > length1 otherwise false
+     * 
+     */
+    public static boolean LIC0(double[] xCoordinates, double[] yCoordinates, int numPoints, double length1){
+        if (numPoints < 2 || length1 < 0 || xCoordinates.length < 2) {
+            return false;
+        }
+
+        for (int i = 0; i < numPoints - 1; i++) {
+            double distance = Math.sqrt(Math.pow(xCoordinates[i + 1] - xCoordinates[i], 2) + Math.pow(yCoordinates[i + 1] - yCoordinates[i], 2));
+            if (distance > length1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Calculates if there exists at least one set of nPts consecutive data points such that at least one of the
      * points lies a distance greater than dist from the line joining the first and last of these nPts points.
      * If the first and last points of these nPts are identical, then the calculated distance 
