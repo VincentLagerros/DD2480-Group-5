@@ -1,11 +1,23 @@
 package se.kth;
 
+import java.awt.geom.Point2D;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 // Class for all unit tests relating to LIC evaluation
 public class EvaluateLICTest {
+
+    private Point2D[] convertToPoint2DArray(int numPoints, double[] xCoordinates, double[] yCoordinates) {
+        assert xCoordinates.length == yCoordinates.length;
+        Point2D[] coordinates = new Point2D.Double[numPoints];
+        for (int i = 0; i < numPoints; i++){
+            coordinates[i] = new Point2D.Double(xCoordinates[i], yCoordinates[i]);
+        } 
+        return coordinates;
+    }
+
   // ---------------------------------------------------- LIC0 ----------------------------------------------------
     @Test
     public void testLIC0TrueForDistanceGreaterThanLength1(){
@@ -15,7 +27,7 @@ public class EvaluateLICTest {
         globals.numPoints = 4;
         globals.parameters.LENGTH1 = 3;
 
-        assertTrue(EvaluateLIC.LIC0(globals.xCoordinates, globals.yCoordinates, globals.numPoints, globals.parameters.LENGTH1));
+        assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
     @Test
@@ -26,7 +38,7 @@ public class EvaluateLICTest {
         globals.numPoints = 4;
         globals.parameters.LENGTH1 = 5;
 
-        assertFalse(EvaluateLIC.LIC0(globals.xCoordinates, globals.yCoordinates, globals.numPoints, globals.parameters.LENGTH1));
+        assertFalse(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
     @Test
@@ -37,7 +49,7 @@ public class EvaluateLICTest {
         globals.numPoints = 2;
         globals.parameters.LENGTH1 = 3;
 
-        assertFalse(EvaluateLIC.LIC0(globals.xCoordinates, globals.yCoordinates, globals.numPoints, globals.parameters.LENGTH1));
+        assertFalse(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
     @Test 
@@ -48,7 +60,7 @@ public class EvaluateLICTest {
         globals.numPoints = 1;
         globals.parameters.LENGTH1 = 0;
 
-        assertFalse(EvaluateLIC.LIC0(globals.xCoordinates, globals.yCoordinates, globals.numPoints, globals.parameters.LENGTH1));
+        assertFalse(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
     @Test 
@@ -59,7 +71,7 @@ public class EvaluateLICTest {
         globals.numPoints = 4;
         globals.parameters.LENGTH1 = 1;
 
-        assertTrue(EvaluateLIC.LIC0(globals.xCoordinates, globals.yCoordinates, globals.numPoints, globals.parameters.LENGTH1));
+        assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
   // ---------------------------------------------------- LIC6 ----------------------------------------------------

@@ -1,5 +1,7 @@
 package se.kth;
 
+import java.awt.geom.Point2D;
+
 public class EvaluateLIC {
 
     /**
@@ -15,13 +17,18 @@ public class EvaluateLIC {
      *         distance dist > length1 otherwise false
      * 
      */
-    public static boolean LIC0(double[] xCoordinates, double[] yCoordinates, int numPoints, double length1){
-        if (numPoints < 2 || length1 < 0 || xCoordinates.length < 2) {
+    public static boolean LIC0(Point2D[] coordinates, double length1) {
+        assert coordinates != null;
+        assert length1 >= 0;
+        
+        if (coordinates.length < 2) {
             return false;
         }
 
-        for (int i = 0; i < numPoints - 1; i++) {
-            double distance = Math.sqrt(Math.pow(xCoordinates[i + 1] - xCoordinates[i], 2) + Math.pow(yCoordinates[i + 1] - yCoordinates[i], 2));
+        for (int i = 0; i < coordinates.length - 1; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + 1];
+            double distance = pt1.distance(pt2);
             if (distance > length1) {
                 return true;
             }
