@@ -2,7 +2,11 @@ package se.kth;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+
+import java.awt.geom.Point2D;
+import java.util.Arrays;
 
 // Class for all unit tests relating to LIC evaluation
 public class EvaluateLICTest {
@@ -64,80 +68,144 @@ public class EvaluateLICTest {
 
   // ---------------------------------------------------- LIC6 ----------------------------------------------------
     @Test
-    public void testLIC6Positive(){
+    public void testLIC3Positive() {
+        //Case where a valid input is given
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[10];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+
+        coordinates[9] = new Point2D.Double(5, 5);
+        coordinates[8] = new Point2D.Double(-5, 5);
+        double area = 0.5;
+
+        assertTrue(m.LIC3(coordinates, area));
+    }
+
+    @Test
+    public void testLIC3NegativeForNoTriangle() {
+        //Case where no points create a triangle with area>0
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[10];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+        coordinates[9] = new Point2D.Double(5, 5);
+        double area = 0.5;
+
+        assertFalse(m.LIC3(coordinates, area));
+    }
+
+    @Test
+    public void testLIC3NegativeForLargeAreaThreshold() {
+        //Case where area threshold is larger than the triangle created by the points
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[10];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+
+        coordinates[9] = new Point2D.Double(5, 5);
+        coordinates[8] = new Point2D.Double(-5, 5);
+        double area = 50;
+
+        assertFalse(m.LIC3(coordinates, area));
+    }
+
+    @Test
+    public void testLIC6Positive() {
         // Case where at least one point lies farther than dist from the line
         EvaluateLIC eval = new EvaluateLIC();
-        double[] x = {0, 1, 2, 3};
-        double[] y = {0, 2, 0, 2};
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 2);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(3, 2);
+
         int numPoints = 4;
         int nPts = 3;
         double dist = 1.5;
 
-        assertTrue(eval.LIC6(x,y,numPoints, nPts, dist));
+        assertTrue(eval.LIC6(coordinates, numPoints, nPts, dist));
     }
 
     @Test
-    public void testLIC6PositiveIdentical(){
+    public void testLIC6PositiveIdentical() {
         // Case where at least one point lies farther than dist from the first point and the first and last points in the group are identical
         EvaluateLIC eval = new EvaluateLIC();
-        double[] x = {0, 1, 0};
-        double[] y = {0, 0, 0};
+        Point2D[] coordinates = new Point2D.Double[3];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+        coordinates[2] = new Point2D.Double(0, 0);
+
         int numPoints = 3;
         int nPts = 3;
         double dist = 0.5;
 
-        assertTrue(eval.LIC6(x,y,numPoints, nPts, dist));
+        assertTrue(eval.LIC6(coordinates, numPoints, nPts, dist));
     }
 
     @Test
-    public void testLIC6Neagtive(){
+    public void testLIC6Neagtive() {
         // Case where all points lie within dist from the line
         EvaluateLIC eval = new EvaluateLIC();
-        double[] x = {0, 1, 2, 3};
-        double[] y = {0, 0, 0, 0};
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(3, 0);
+
         int numPoints = 4;
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
     }
 
     @Test
-    public void testLIC6NeagtiveShort(){
+    public void testLIC6NegativeShort() {
         // Case where numPoints < 3
         EvaluateLIC eval = new EvaluateLIC();
-        double[] x = {0, 1};
-        double[] y = {0, 0};
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+
         int numPoints = 2;
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
     }
 
     @Test
-    public void testLIC6NeagtiveEdge(){
+    public void testLIC6NegativeEdge() {
         // Case where numPoints = 3 and nPts=3
         EvaluateLIC eval = new EvaluateLIC();
-        double[] x = {0, 0, 0};
-        double[] y = {0, 0, 0};
+        Point2D[] coordinates = new Point2D.Double[3];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(0, 0);
+        coordinates[2] = new Point2D.Double(0, 0);
+
         int numPoints = 3;
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
     }
 
     @Test
-    public void testLIC6NeagtiveLine(){
+    public void testLIC6NegativeLine() {
         // Case where all points are on the same line
         EvaluateLIC eval = new EvaluateLIC();
-        double[] x = {0, 1, 2, 3};
-        double[] y = {0, 1, 2, 3};
+        Point2D[] coordinates = new Point2D.Double[4];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 1);
+        coordinates[2] = new Point2D.Double(2, 2);
+        coordinates[3] = new Point2D.Double(3, 3);
+
         int numPoints = 4;
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
     }
 }

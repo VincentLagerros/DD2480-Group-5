@@ -12,12 +12,11 @@ public class GlobalDeclarationsTest {
     public void testGlobalInitialization() {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
-
         // Check arrays for coordinates
         assertEquals(100, globals.xCoordinates.length);
         assertEquals(100, globals.yCoordinates.length);
 
-        // Check som of the boolean arrays
+        // Check some of the boolean arrays
         for (boolean value : globals.cmv) {
             assertFalse(value);
         }
@@ -45,10 +44,10 @@ public class GlobalDeclarationsTest {
         assertNotEquals(GlobalDeclarations.CompType.EQ, GlobalDeclarations.doubleCompare(1.0, 2.0));
         assertNotEquals(GlobalDeclarations.CompType.LT, GlobalDeclarations.doubleCompare(1.0, 1.0));
         assertNotEquals(GlobalDeclarations.CompType.GT, GlobalDeclarations.doubleCompare(1.0, 1.0));
-    }   
+    }
 
     @Test
-    public void testGlobalVariablesCorrecltyAssigned() {
+    public void testGlobalVariablesCorrectlyAssigned() {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
 
         globals.numPoints = 10;
