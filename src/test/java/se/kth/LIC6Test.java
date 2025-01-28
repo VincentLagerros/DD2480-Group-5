@@ -1,0 +1,58 @@
+package se.kth;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+public class LIC6Test {
+    @Test
+    public void testLIC6Positive(){
+        // Case where at least one point lies farther than dist from the line
+        EvaluateLIC eval = new EvaluateLIC();
+        double[] x = {0, 1, 2, 3};
+        double[] y = {0, 2, 0, 2};
+        int numPoints = 4;
+        int nPts = 3;
+        double dist = 1.5;
+
+        assertTrue(eval.LIC6(x,y,numPoints, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6PositiveIdentical(){
+        // Case where at least one point lies farther than dist from the first point and the first and last points in the group are identical
+        EvaluateLIC eval = new EvaluateLIC();
+        double[] x = {0, 1, 0};
+        double[] y = {0, 0, 0};
+        int numPoints = 3;
+        int nPts = 3;
+        double dist = 0.5;
+
+        assertTrue(eval.LIC6(x,y,numPoints, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6Neagtive(){
+        // Case where all points lie within dist from the line
+        EvaluateLIC eval = new EvaluateLIC();
+        double[] x = {0, 1, 2, 3};
+        double[] y = {0, 0, 0, 0};
+        int numPoints = 4;
+        int nPts = 3;
+        double dist = 1.5;
+
+        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6NeagtiveShort(){
+        EvaluateLIC eval = new EvaluateLIC();
+        double[] x = {0, 1};
+        double[] y = {0, 0};
+        int numPoints = 4;
+        int nPts = 3;
+        double dist = 1.5;
+
+        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+    }
+}
