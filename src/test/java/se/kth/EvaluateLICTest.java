@@ -61,11 +61,10 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 0);
         coordinates[3] = new Point2D.Double(3, 2);
 
-        int numPoints = 4;
         int nPts = 3;
         double dist = 1.5;
 
-        assertTrue(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertTrue(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -78,11 +77,10 @@ public class EvaluateLICTest {
         coordinates[1] = new Point2D.Double(1, 0);
         coordinates[2] = new Point2D.Double(0, 0);
 
-        int numPoints = 3;
         int nPts = 3;
         double dist = 0.5;
 
-        assertTrue(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertTrue(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -96,11 +94,10 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 0);
         coordinates[3] = new Point2D.Double(3, 0);
 
-        int numPoints = 4;
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -108,15 +105,15 @@ public class EvaluateLICTest {
         // Case where numPoints < 3
         EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
 
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 0);
 
-        int numPoints = 2;
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -128,11 +125,10 @@ public class EvaluateLICTest {
         coordinates[1] = new Point2D.Double(0, 0);
         coordinates[2] = new Point2D.Double(0, 0);
 
-        int numPoints = 3;
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -145,11 +141,10 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 2);
         coordinates[3] = new Point2D.Double(3, 3);
 
-        int numPoints = 4;
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
 

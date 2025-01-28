@@ -13,7 +13,8 @@ public class EvaluateLIC {
      * @return true if the three datapoints exist, otherwise false
      */
     public boolean LIC3(Point2D[] coordinates, double areaThreshold) {
-        if (areaThreshold < 0) return false;
+        assert coordinates != null;
+        assert 0 <= areaThreshold;
 
         Point2D pt1, pt2, pt3;
 
@@ -37,15 +38,16 @@ public class EvaluateLIC {
      * The condition is not met when NumPoints < 3.
      *
      * @param coordinates an array of the coordinates for the datapoints
-     * @param numPoints   Number of datapoints (3 ≤ nPts ≤ numPoints)
-     * @param nPts        Number of consecutive points (3 ≤ nPts ≤ numPoints)
+     * @param nPts        Number of consecutive points (3 ≤ nPts ≤ coordinates.length)
      * @param dist        distance computed to (0 ≤ DIST)
      * @return True if such a point exists, False otherwise
      */
-    public boolean LIC6(Point2D[] coordinates, int numPoints, int nPts, double dist) {
-        if (numPoints < 3 || nPts > numPoints || coordinates.length < 3) {
-            return false;
-        }
+    public boolean LIC6(Point2D[] coordinates, int nPts, double dist) {
+        assert coordinates != null;
+        assert 0 <= dist;
+        assert 3 <= nPts;
+        int numPoints = coordinates.length;
+        assert nPts <= numPoints;
 
         // Iterate over all possible consecutive nPts large groups of points
         for (int i = 0; i <= numPoints - nPts; i++) {
