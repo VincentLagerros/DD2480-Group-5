@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 // Class for all unit tests relating to LIC evaluation
-public class LICTest {
+public class EvaluateLICTest {
     @Test
     public void testLIC6Positive(){
         // Case where at least one point lies farther than dist from the line
@@ -54,6 +54,32 @@ public class LICTest {
         int numPoints = 2;
         int nPts = 3;
         double dist = 1.5;
+
+        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6NeagtiveEdge(){
+        // Case where numPoints = 3 and nPts=3
+        EvaluateLIC eval = new EvaluateLIC();
+        double[] x = {0, 0, 0};
+        double[] y = {0, 0, 0};
+        int numPoints = 3;
+        int nPts = 3;
+        double dist = 0.01;
+
+        assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6NeagtiveLine(){
+        // Case where all points are on the same line
+        EvaluateLIC eval = new EvaluateLIC();
+        double[] x = {0, 1, 2, 3};
+        double[] y = {0, 1, 2, 3};
+        int numPoints = 4;
+        int nPts = 3;
+        double dist = 0.01;
 
         assertFalse(eval.LIC6(x,y,numPoints, nPts, dist));
     }
