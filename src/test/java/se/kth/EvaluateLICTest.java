@@ -5,6 +5,52 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class EvaluateLICTest {
+    
+    // Tests for LIC3
+    @Test
+    public void testLIC3Positive(){
+        //Case where a valid input is given
+        EvaluateLIC m = new EvaluateLIC();
+        double[] x = new double[10];
+        double[] y = new double[10];
+        x[9]=5;
+        y[9]=5;
+        x[8]=(-5);
+        y[8]=5;
+        double area = 0.5;
+
+        assertTrue(m.LIC3(x,y,area));
+    }
+
+    @Test
+    public void testLIC3NegativeForNoTriangle(){
+        //Case where no points create a triangle with area>0
+        EvaluateLIC m = new EvaluateLIC();
+        double[] x = new double[10];
+        double[] y = new double[10];
+        x[9]=5;
+        y[9]=5;
+        double area = 0.5;
+
+        assertFalse(m.LIC3(x,y,area));
+    }
+
+    @Test
+    public void testLIC3NegativeForLargeAreaThreshold(){
+        //Case where area threshold is larger than the triangle created by the points
+        EvaluateLIC m = new EvaluateLIC();
+        double[] x = new double[10];
+        double[] y = new double[10];
+        x[9]=5;
+        y[9]=5;
+        x[8]=(-5);
+        y[8]=5;
+        double area = 50;
+
+        assertFalse(m.LIC3(x,y,area));
+    }
+
+    // Tests for LIC5
     @Test
     public void testLIC5Positive(){
         // Case with points so that X[j] < X[i], i = j - 1 
@@ -44,7 +90,8 @@ public class EvaluateLICTest {
 
         assertFalse(m.LIC5(xCoordinates, numPoints));
     }
-    
+
+    // Tests for LIC6
     @Test
     public void testLIC6Positive(){
         // Case where at least one point lies farther than dist from the line
