@@ -4,8 +4,10 @@ public class EvaluateLIC {
 
     /**
      * Calculates if there exists at least one set of nPts consecutive data points such that at least one of the
-     * points. If the first and last points of these nPts are identical, then the calculated distance 
-     * to compare with dist will be the distance from the coincident point. The condition is not met when NumPoints < 3. 
+     * points lies a distance greater than dist from the line joining the first and last of these nPts points.
+     * If the first and last points of these nPts are identical, then the calculated distance 
+     * to compare with dist will be the distance from the coincident point. 
+     * The condition is not met when NumPoints < 3. 
      *
      * @param xCoordinates  An array of the x-coordinates for the datapoints 
      * @param yCoordinates  An array of the y-coordinates for the datapoints
