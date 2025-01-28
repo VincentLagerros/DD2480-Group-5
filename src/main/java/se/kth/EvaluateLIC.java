@@ -65,6 +65,23 @@ public class EvaluateLIC {
     }
 
     /**
+     * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]), 
+     * suchthat X[j] - X[i] < 0. (where i = j-1)
+     *
+     * @param coordinates   An array of the coordinates for the datapoints
+     * @return              True if such a set exists, False otherwise
+     */
+    public boolean LIC5(Point2D[] coordinates){
+        int numPoints = coordinates.length;
+        for(int j = 1; j < numPoints; j++){
+            if(coordinates[j].getX() - coordinates[j-1].getX() < 0){
+                return true;
+            }
+        }
+       return false;
+    }
+
+    /**
      * Calculates if there exists at least one set of nPts consecutive data points such that at least one of the
      * points lies a distance greater than dist from the line joining the first and last of these nPts points.
      * If the first and last points of these nPts are identical, then the calculated distance
