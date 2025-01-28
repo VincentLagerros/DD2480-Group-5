@@ -61,11 +61,10 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 0);
         coordinates[3] = new Point2D.Double(3, 2);
 
-        int numPoints = 4;
         int nPts = 3;
         double dist = 1.5;
 
-        assertTrue(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertTrue(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -78,11 +77,10 @@ public class EvaluateLICTest {
         coordinates[1] = new Point2D.Double(1, 0);
         coordinates[2] = new Point2D.Double(0, 0);
 
-        int numPoints = 3;
         int nPts = 3;
         double dist = 0.5;
 
-        assertTrue(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertTrue(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -96,11 +94,10 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 0);
         coordinates[3] = new Point2D.Double(3, 0);
 
-        int numPoints = 4;
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -108,15 +105,15 @@ public class EvaluateLICTest {
         // Case where numPoints < 3
         EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
 
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 0);
 
-        int numPoints = 2;
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -128,11 +125,10 @@ public class EvaluateLICTest {
         coordinates[1] = new Point2D.Double(0, 0);
         coordinates[2] = new Point2D.Double(0, 0);
 
-        int numPoints = 3;
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
     @Test
@@ -145,10 +141,50 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 2);
         coordinates[3] = new Point2D.Double(3, 3);
 
-        int numPoints = 4;
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(coordinates, numPoints, nPts, dist));
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
+    }
+
+
+    @Test
+    public void testLIC9Coincide() {
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[100];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+        assertFalse(eval.LIC9(coordinates, 1, 1, 0.001));
+        // epsilon = PI means that if any 3 valid points exists, then it should return, however not if they intersect
+        assertFalse(eval.LIC9(coordinates, 1, 1, -Math.PI));
+        assertFalse(eval.LIC9(coordinates, 10, 10, -1000));
+    }
+
+    @Test
+    public void testLIC9Any() {
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[100];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+        coordinates[10] = new Point2D.Double(1.0, 1.0);
+        // will always find something, no matter the input (besides Coincide)
+        assertTrue(eval.LIC9(coordinates, 1, 1, -10000.0));
+        // the point is 0deg so any eps < pi works
+        assertTrue(eval.LIC9(coordinates, 1, 1, 0.0));
+        // always false, as eps is too large
+        assertFalse(eval.LIC9(coordinates, 1, 1, Math.PI + 1.0));
+    }
+
+    @Test
+    public void testLIC9_90deg() {
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[5];
+        coordinates[0] = new Point2D.Double(0.0, 0.0);
+        coordinates[1] = new Point2D.Double(1.0, 0.0);
+        coordinates[2] = new Point2D.Double(1.0, 1.0);
+        // numPoints >= 5
+        coordinates[3] = new Point2D.Double(1.0, 1.0);
+        coordinates[4] = new Point2D.Double(1.0, 1.0);
+        assertTrue(eval.LIC9(coordinates, 1, 1, 0.0));
+        assertFalse(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 + 0.1));
+        assertTrue(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 - 0.1));
     }
 }
