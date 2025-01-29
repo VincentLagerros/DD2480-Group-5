@@ -2,14 +2,11 @@ package se.kth;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
-import java.lang.annotation.Target;
-import org.junit.Test;
-import java.util.Arrays;   
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
    
 
 // Class for all unit tests relating to LIC evaluation
@@ -122,7 +119,7 @@ public class EvaluateLICTest {
         globals.xCoordinates = new double[]{0, 2, 4};
         globals.yCoordinates = new double[]{0, 0, 0};
         globals.numPoints = 3;
-        globals.parameters.RADIUS1 = 1;
+        globals.parameters.RADIUS1 = 6;
 
         assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
     }
@@ -136,6 +133,17 @@ public class EvaluateLICTest {
         globals.parameters.RADIUS1 = 1;
 
         assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1TrueForPointsOnSingleLineButStillOutsideOfCircle(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 0, 0};
+        globals.yCoordinates = new double[]{0, 100000, 200000};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 1;
+
+        assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
     }
 
   // ---------------------------------------------------- LIC6 ----------------------------------------------------
@@ -446,7 +454,7 @@ public class EvaluateLICTest {
     }
 
    // ---------------------------------------------------- LIC6 ----------------------------------------------------
-   @Test
+    @Test
     public void testLIC6Positive() {
         // Case where at least one point lies farther than dist from the line
         EvaluateLIC eval = new EvaluateLIC();

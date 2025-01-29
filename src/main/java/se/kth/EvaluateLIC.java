@@ -63,9 +63,14 @@ public class EvaluateLIC {
             double s = (a + b + c) / 2;
             double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
 
-            // If the area is zero since points are on a straight line.
-            // They can fit into any circle.
+            // If points are on a straight line.
             if (area == 0) {
+                double largestDistance = Math.max(a, Math.max(b, c));
+
+                if (largestDistance > radius1 * 2) {
+                    return true; // The points cannot be contained in the circle
+                }
+                
                 continue;
             }
 
