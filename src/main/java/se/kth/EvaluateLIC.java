@@ -181,4 +181,51 @@ public class EvaluateLIC {
         }
         return false;
     }
+    
+    /**
+     * There exists at least one set of two data points, separated by exactly K PTS consecutive
+     * intervening points, which are a distance greater than the length, LENGTH1, apart. In addition, 
+     * there exists at least one set of two data points (which can be the same or different from
+     * the two data points just mentioned), separated by exactly K PTS consecutive intervening
+     * points, that are a distance less than the length, LENGTH2, apart. Both parts must be true 
+     * for the LIC to be true. The condition is not met when coordinates.length < 3.
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param kPts        number of consecutive intervening points
+     * @param length2     length used to compare the distance of the points, 0 ≤ LENGTH2
+
+     * @return If three data points can be found following the conditions
+     */
+    public boolean LIC12(Point2D[] coordinates, int kPts, double length2) {
+        if(coordinates.length < 3){
+            return false;
+        }
+        assert length2 >= 0;
+        assert kPts >= 0;
+
+
+        boolean greater = false;
+        boolean smaller = false;
+
+        for(int i = 0; i < coordinates.length - kPts - 1; i++){
+            Point2D pt1 = coordinates[i]; 
+            Point2D pt2 = coordinates[i + kPts + 1]; 
+
+            // point distance formula: https://www.cuemath.com/geometry/distance-between-two-points/
+            double distance = Math.sqrt((Math.pow(pt2.getX() - pt1.getX(), 2)) + (Math.pow(pt2.getY() - pt1.getY(), 2)));
+            
+            if(distance > length2){
+                greater = true;
+            }
+            if(distance < length2){
+                smaller = true;
+            }
+        }
+
+        if(greater && smaller){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
