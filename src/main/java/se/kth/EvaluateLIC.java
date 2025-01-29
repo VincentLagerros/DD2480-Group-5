@@ -364,8 +364,6 @@ public class EvaluateLIC {
         return false;
     }
 
-    
-    
     /**
      * There exists at least one set of three data points separated by exactly E PTS and F PTS
      * consecutive intervening points, respectively, that are the vertices of a triangle with
