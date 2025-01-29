@@ -414,7 +414,7 @@ public class EvaluateLICTest {
     }
 
     @Test
-    public void testLIC11LargeD() {
+    public void testLIC11NegativeLarge() {
         EvaluateLIC eval = new EvaluateLIC();
         // Large array with negative input points
         Point2D[] coordinates = new Point2D[1000];
