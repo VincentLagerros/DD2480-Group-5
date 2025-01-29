@@ -196,13 +196,14 @@ public class EvaluateLIC {
     public boolean LIC10(Point2D[] coordinates, int ePts, int fPts, double area1) {
         assert coordinates != null;
         int numPoints = coordinates.length;
-        assert ePts >= 1;
-        assert fPts >= 1;
-        assert ePts + fPts <= numPoints - 3;
-
         if (numPoints < 5) {
             return false;
         }
+
+        assert ePts >= 1;
+        assert fPts >= 1;
+        assert ePts + fPts <= numPoints - 3;
+        
         for (int i = 0; i < numPoints - ePts - fPts - 2; i++) {
             Point2D pt1 = coordinates[i]; //0
             Point2D pt2 = coordinates[i + ePts + 1]; // 3
