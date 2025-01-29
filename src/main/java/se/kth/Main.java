@@ -6,7 +6,7 @@ public class Main {
     public static void DECIDE(GlobalDeclarations.Globals globals){
         Point2D[] coordinates = convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates);
 
-        // Conditions Met Vector (CMV) (can remove for and cases when all LIC are in place)
+        // Conditions Met Vector (CMV)
         globals.cmv[0] = EvaluateLIC.LIC0(coordinates, globals.parameters.LENGTH1);
         globals.cmv[1] = EvaluateLIC.LIC1(coordinates, globals.parameters.RADIUS1);
         globals.cmv[2] = new EvaluateLIC().LIC2(coordinates, globals.parameters.EPSILON);
