@@ -396,7 +396,6 @@ public class EvaluateLICTest {
     public void testExceptLIC10() {
         EvaluateLIC eval = new EvaluateLIC();
         // 4 tests for bad inputs, ePts < 1, fPts < 1, ePts + fPts > numPoints - 3, NUMPOINTS < 5
-
         Point2D[] coordinates = {
             new Point2D.Double(-1, -1), 
             new Point2D.Double(0, 0), 
@@ -509,11 +508,47 @@ public class EvaluateLICTest {
         Point2D[] coordinates = {
             new Point2D.Double(-1, 0), 
             new Point2D.Double(0, 5), 
-            new Point2D.Double(2, 10),
+            new Point2D.Double(2, 10)
         };
         int gPts1 = 1;
 
         assertFalse(eval.LIC11(coordinates, gPts1));
+    }
+
+    @Test
+    public void testExceptLIC11() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 3 tests for bad inputs, gPts < 1, gPts > numPoints - 2, NUMPOINTS < 3
+        Point2D[] coordinates = {
+            new Point2D.Double(-1, -1), 
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(1, 1), 
+            new Point2D.Double(2, 2) 
+        };
+        Point2D[] coordinatesShort = {
+            new Point2D.Double(-1, -1), 
+            new Point2D.Double(0, 0) 
+        };
+        
+        int gPts1 = -1;
+        int gPts2 = 5;
+    
+        // gPts < 1
+        try {
+        assertFalse(eval.LIC11(coordinates, gPts1));
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // gPts > numPoints - 2
+        try {
+            assertFalse(eval.LIC11(coordinates, gPts2));
+            } catch (AssertionError e) {
+                assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+            }
+
+        // NUMPOINTS < 5
+        assertFalse(eval.LIC11(coordinatesShort, gPts2));
     }
 
 }

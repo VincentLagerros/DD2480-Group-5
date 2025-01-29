@@ -203,7 +203,7 @@ public class EvaluateLIC {
         assert ePts >= 1;
         assert fPts >= 1;
         assert ePts + fPts <= numPoints - 3;
-        
+
         for (int i = 0; i < numPoints - ePts - fPts - 2; i++) {
             Point2D pt1 = coordinates[i]; //0
             Point2D pt2 = coordinates[i + ePts + 1]; // 3
@@ -238,8 +238,7 @@ public class EvaluateLIC {
        // Condition is not met when NUMPOINTS < 3
        if(numPoints < 3){
            return false;
-       }
-        
+       }        
        // Validating input
        // This must be done after numPoints is checked due to edge Case, if numPoints = 3 then gPts = 2 is invalid, 
        // rather than an assertion error. 
