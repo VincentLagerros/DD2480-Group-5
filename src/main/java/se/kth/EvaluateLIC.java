@@ -500,8 +500,7 @@ public class EvaluateLIC {
             if(condition1&&condition2) return true;
 
             // calculate triangle area between points
-            double k = 0.5 * (Math.abs(pt1.getX() * pt2.getY() + pt2.getX() * pt3.getY() + pt3.getX() * pt1.getY() - pt1.getX() * pt3.getY() - pt2.getX() *
-            pt1.getY() - pt3.getX() * pt2.getY()));
+            double k = getTriangleArea(pt1, pt2, pt3);
 
             // calculate area of circle with all points on its edge
             double minRadiusB = (a*b*c)/(4*k);
