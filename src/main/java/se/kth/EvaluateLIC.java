@@ -181,4 +181,44 @@ public class EvaluateLIC {
         }
         return false;
     }
+
+    /**
+     * There exists at least one set of three data points separated by exactly E PTS and F PTS 
+     * consecutive intervening points, respectively, that are the vertices of a triangle with 
+     * area greater than AREA1. The condition is not met when NUMPOINTS < 5.
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param ePts        number of consecutive points between the first and second selected point, 1 ≤ E PTS, E PTS+F PTS ≤ NUMPOINTS−3
+     * @param fPts        represents the number of consecutive points between the second and third selected point, 1 ≤ F PTS, E PTS+F PTS ≤ NUMPOINTS−3     
+     * @param area1       area used to compare with
+     * @return            If three data points can be found following the conditions
+     */
+    public boolean LIC10(Point2D[] coordinates, int ePts, int fPts, double area1) {
+        assert coordinates != null;
+        int numPoints = coordinates.length;
+        assert ePts >= 1;
+        assert fPts >= 1;
+        assert ePts + fPts <= numPoints - 3;
+
+        if (numPoints < 5) {
+            return false;
+        }
+        for (int i = 0; i < numPoints - ePts - fPts - 2; i++) {
+            Point2D pt1 = coordinates[i]; //0
+            Point2D pt2 = coordinates[i + ePts + 1]; // 3
+            Point2D pt3 = coordinates[i + ePts + fPts + 2]; // 5
+            
+            // https://www.cuemath.com/geometry/area-of-triangle-in-coordinate-geometry/
+            double area = (0.5) * Math.abs(
+                                            pt1.getX() * (pt2.getY() - pt3.getY()) +
+                                            pt2.getX() * (pt3.getY() - pt1.getY()) + 
+                                            pt3.getX() * (pt1.getY() - pt2.getY()));
+            // LIC condition
+            if( area > area1){
+                return true;
+            }
+
+        }
+        return false;
+    }
 }

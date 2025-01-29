@@ -306,4 +306,90 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 + 0.1));
         assertTrue(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 - 0.1));
     }
+
+    // ---------------------------------------------------- LIC10 ----------------------------------------------------
+    @Test
+    public void testLIC10positive() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Positive input points 
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(5, 5), 
+            new Point2D.Double(10, 10), 
+            new Point2D.Double(15, 5), 
+            new Point2D.Double(20, 0),
+            new Point2D.Double(20, 0),
+            new Point2D.Double(-5, 0)
+        };
+        int ePts1 = 1;
+        int ePts2 = 2;
+        int fPts = 1;
+        double area1 = 99.9;
+        double area2 = 62;
+
+        assertTrue(eval.LIC10(coordinates, ePts1, fPts, area1));
+        assertTrue(eval.LIC10(coordinates, ePts2, fPts, area2));
+    }
+   
+    @Test
+    public void testLIC10Min() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // positive and negative minimum possible input, numPoints = 5
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(1, 1), 
+            new Point2D.Double(2, 2), 
+            new Point2D.Double(3, 3), 
+            new Point2D.Double(4, 0)
+        };
+        int ePts = 1;
+        int fPts = 1;
+        double area1 = 3;
+        double area2 = 4;
+
+        assertTrue(eval.LIC10(coordinates, ePts, fPts,area1));
+        assertFalse(eval.LIC10(coordinates, ePts, fPts,area2));
+    }
+
+    @Test
+    public void testLIC10Neagtive() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // negative input max area = 13.5, with edge area = area1
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(1, 1), 
+            new Point2D.Double(2, 0), 
+            new Point2D.Double(3, 3), 
+            new Point2D.Double(1, 10),
+            new Point2D.Double(1, 10)
+        };
+        int ePts = 2;
+        int fPts = 1;
+        double area1 = 14;
+        double area2 = 13.5;
+        
+        assertFalse(eval.LIC10(coordinates, ePts, fPts, area1));
+        assertFalse(eval.LIC10(coordinates, ePts, fPts, area2));
+
+    }
+
+    @Test
+    public void testLIC10NeagtiveCo() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // negative coolinear input
+        Point2D[] coordinates = {
+            new Point2D.Double(-1, -1), 
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(1, 1), 
+            new Point2D.Double(2, 2), 
+            new Point2D.Double(3, 3), 
+            new Point2D.Double(4, 4)
+        };
+        int ePts = 1;
+        int fPts = 1;
+        double area1 = 0.1;
+        
+        assertFalse(eval.LIC10(coordinates, ePts, fPts,area1));
+    }
+
 }
