@@ -347,11 +347,20 @@ public class EvaluateLIC {
             double ax = pt1.getX(), ay = pt1.getY();
             double bx = pt2.getX(), by = pt2.getY();
             double cx = pt3.getX(), cy = pt3.getY();
+            double a = pt1.distance(pt2);
+            double b = pt2.distance(pt3);
+            double c = pt3.distance(pt1);
 
             // https://en.wikipedia.org/wiki/Circumcircle 
             double d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by));
-            // Do not evaluate these points if they are collinear
+            // If the points are collinear
             if (d == 0) {
+                double largestDistance = Math.max(a, Math.max(b, c));
+
+                if (largestDistance > radius1 * 2) {
+                    return true; // The points cannot be contained in the circle
+                }
+                
                 continue;
             }
             //Coordinates for circumcenter
