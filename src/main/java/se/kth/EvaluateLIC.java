@@ -141,11 +141,7 @@ public class EvaluateLIC {
         assert kPts <= numPoints - 2;
 
         for(int i = 0; i < numPoints - kPts -1; i++){
-            double xVector = coordinates[i+kPts+1].getX() - coordinates[i].getX();
-            double yVector = coordinates[i+kPts+1].getY() - coordinates[i].getY();
-
-            double distance = Math.sqrt(Math.pow(xVector, 2) + Math.pow(yVector, 2));
-
+            double distance = coordinates[i].distance(coordinates[i+kPts+1]);
             if(distance > length1){
                 return true;
             }
