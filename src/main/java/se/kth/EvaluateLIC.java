@@ -79,6 +79,53 @@ public class EvaluateLIC {
     }
 
     /**
+     * Calculates if there exists at least one set of three consecutive data points which form an angle such that:
+     * angle < (PI−epsilon) or angle > (PI+epsilon)
+     * The second of the three consecutive points is always the vertex of the angle. If either the first
+     * point or the last point (or both) coincides with the vertex, the angle is undefined and the LIC is not satisfied by those three points.
+     *
+     * @param coordinates   an array of the coordinates for the datapoints 
+     * @param epsilon       Fault tolerance of the angle (0 ≤ EPSILON < PI)
+     * @return              True if such an angle exists, False otherwise
+     */
+    public boolean LIC2(Point2D[] coordinates, double epsilon){
+        assert epsilon >= 0;
+        assert epsilon < Math.PI;
+        int numPoints = coordinates.length;
+
+        for (int i = 0; i < numPoints - 2; i++) {
+
+            // Get the coordinates of three consecutive data points
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + 1];
+            Point2D pt3 = coordinates[i + 2];
+
+            // Do not evaluate theese points if point 1 or 3  coincides with the vertex (point 2)
+            if (pt1.equals(pt2) || pt3.equals(pt2)) {
+                continue;
+            }
+    
+            // Create diectional vectors with point 2 as vertex
+            double xVector1 = pt2.getX() - pt1.getX();
+            double yVector1 = pt2.getY() - pt1.getY();
+            double xVector2 = pt2.getX() - pt3.getX();
+            double yVector2 = pt2.getY() - pt3.getY();
+
+            // Calculate the angle from the dot-product and and magnitude of the vectors
+            double dotProduct = (xVector1 * xVector2) + (yVector1 * yVector2);
+            double magnitude1 = Math.sqrt(Math.pow(xVector1, 2) + Math.pow(yVector1, 2));
+            double magnitude2 = Math.sqrt(Math.pow(xVector2, 2) + Math.pow(yVector2, 2));
+            double angle = Math.acos(dotProduct / (magnitude1 * magnitude2));
+
+            // Return True if LIC2 condition is met
+            if (angle < (Math.PI - epsilon) || angle > (Math.PI + epsilon)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Calculates if there exists three consecutive datapoints where the triangle formed from
      * using them as vertices has an area that exceeds the specified area threshold.
      *
@@ -179,6 +226,36 @@ public class EvaluateLIC {
         return false;
     }
 
+
+    /**
+     * Calculates if there exists at least one set of two data points separated by exactly kPts consecutive 
+     * intervening points that are a distance greater than the length, lenght1, apart. 
+     * The conditionis not met when numPoints < 3.
+     *
+     * @param coordinates   an array of the coordinates for the datapoints 
+     * @param kPts          Number of consecutive intervening datapoints sperating the points compared (1 ≤ kPts ≤ (numPoints - 2)
+     * @param lenght1       Length of minimum distance between the two separated points
+     * @return              True if such a point exists, False otherwise
+     */
+    public boolean LIC7(Point2D[] coordinates, int kPts, double length1){
+        int numPoints = coordinates.length;
+        if(numPoints < 3){
+            return false;
+        }
+        
+        assert kPts >= 1;
+        assert kPts <= numPoints - 2;
+
+        for(int i = 0; i < numPoints - kPts -1; i++){
+            double distance = coordinates[i].distance(coordinates[i+kPts+1]);
+            if(distance > length1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * There exists at least one set of three data points separated by exactly C_PTS and D_PTS
      * consecutive intervening points, respectively, that form an angle such that:
@@ -201,10 +278,10 @@ public class EvaluateLIC {
         if (numPoints < 5) {
             return false;
         }
-        for (int i = cPts; i < numPoints - dPts; i++) {
+        for (int i = cPts + 1; i < numPoints - dPts - 1; i++) {
             Point2D pt1 = coordinates[i]; // vertex
-            Point2D pt2 = coordinates[i - cPts]; // left
-            Point2D pt3 = coordinates[i + dPts]; // right
+            Point2D pt2 = coordinates[i - cPts - 1]; // left
+            Point2D pt3 = coordinates[i + dPts + 1]; // right
 
             // If either the first point or the last point (or both)
             // coincide with the vertex, the angle is undefined and the LIC
