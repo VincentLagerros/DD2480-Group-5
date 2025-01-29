@@ -1,15 +1,13 @@
 package se.kth;
 
 import java.awt.geom.Point2D;
-import java.lang.annotation.Target;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
-import java.util.Arrays;    
+   
 
 // Class for all unit tests relating to LIC evaluation
 public class EvaluateLICTest {
@@ -79,6 +77,213 @@ public class EvaluateLICTest {
 
         assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
+
+  // ---------------------------------------------------- LIC1 ----------------------------------------------------
+
+    @Test
+    public void testLIC1TrueForTriangleOutsideRadius() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 4, 2};
+        globals.yCoordinates = new double[]{0, 0, 3};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 1;
+
+        assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1FalseForTriangleInsideRadius() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 2, 1};
+        globals.yCoordinates = new double[]{0, 0, 1};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 2;
+
+        assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1TrueForMultipleTrianglesWithOneExceedingRadius() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1, 2, 6};
+        globals.yCoordinates = new double[]{0, 1, 0, 6};
+        globals.numPoints = 4;
+        globals.parameters.RADIUS1 = 2.5;
+
+        assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1FalseForPointsOnSingleLine() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 2, 4};
+        globals.yCoordinates = new double[]{0, 0, 0};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 6;
+
+        assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1FalseForInsufficientPoints() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1};
+        globals.yCoordinates = new double[]{0, 1};
+        globals.numPoints = 2;
+        globals.parameters.RADIUS1 = 1;
+
+        assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1TrueForPointsOnSingleLineButStillOutsideOfCircle(){
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 0, 0};
+        globals.yCoordinates = new double[]{0, 100000, 200000};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 1;
+
+        assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+  // ---------------------------------------------------- LIC6 ----------------------------------------------------
+    @Test
+    public void testLIC6Positive() {
+        // Case where at least one point lies farther than dist from the line
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 2);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(3, 2);
+
+        int nPts = 3;
+        double dist = 1.5;
+
+        assertTrue(eval.LIC6(coordinates, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6PositiveIdentical() {
+        // Case where at least one point lies farther than dist from the first point and the first and last points in the group are identical
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[3];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+        coordinates[2] = new Point2D.Double(0, 0);
+
+        int nPts = 3;
+        double dist = 0.5;
+
+        assertTrue(eval.LIC6(coordinates, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6Neagtive() {
+        // Case where all points lie within dist from the line
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(3, 0);
+
+        int nPts = 3;
+        double dist = 1.5;
+
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6NegativeShort() {
+        // Case where numPoints < 3
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 0);
+
+        int nPts = 3;
+        double dist = 1.5;
+
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6NegativeEdge() {
+        // Case where numPoints = 3 and nPts=3
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[3];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(0, 0);
+        coordinates[2] = new Point2D.Double(0, 0);
+
+        int nPts = 3;
+        double dist = 0.01;
+
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
+    }
+
+    @Test
+    public void testLIC6NegativeLine() {
+        // Case where all points are on the same line
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 1);
+        coordinates[2] = new Point2D.Double(2, 2);
+        coordinates[3] = new Point2D.Double(3, 3);
+
+        int nPts = 3;
+        double dist = 0.01;
+
+        assertFalse(eval.LIC6(coordinates, nPts, dist));
+    }
+
+    @Test
+    public void testExceptLIC6() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 3 tests for bad inputs, 0 > dist, nPts < 3, nPts > numPoints
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0),
+            new Point2D.Double(2, 0),
+            new Point2D.Double(2, 0),
+            new Point2D.Double(2, 0)
+        };
+        int nPts1 = 3;
+        int nPts2 = 2;
+        int nPts3 = 6;
+        double dist1 = -2;
+        double dist2 = 2;
+
+
+        // 0 > dist
+        try {
+            eval.LIC6(coordinates, nPts1, dist1);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // nPts < 3
+        try {
+            eval.LIC6(coordinates, nPts2, dist2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // nPts > numPoints
+        try {
+            eval.LIC6(coordinates, nPts3, dist2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+    }
+    
 
    // ---------------------------------------------------- LIC2 ----------------------------------------------------
    @Test
@@ -157,6 +362,7 @@ public class EvaluateLICTest {
 
 
   // ---------------------------------------------------- LIC3 ----------------------------------------------------
+
     @Test
     public void testLIC3Positive() {
         //Case where a valid input is given
@@ -319,7 +525,7 @@ public class EvaluateLICTest {
     }
 
    // ---------------------------------------------------- LIC6 ----------------------------------------------------
-   @Test
+    @Test
     public void testLIC6Positive() {
         // Case where at least one point lies farther than dist from the line
         EvaluateLIC eval = new EvaluateLIC();
