@@ -131,28 +131,46 @@ public class EvaluateLIC {
         assert quadsThreshold <=3;
         if(clusterSize<=quadsThreshold) return false;
 
-        ArrayList<Integer> quadList = new ArrayList<Integer>();
+        int[] quadrants = {0,0,0,0};
+        int sum = 0;
 
-        for(Point2D coord:coordinates){
-            if(coord.getX()>=0&&coord.getY()>=0){
-                quadList.add(1);
-            }else if(coord.getX()<0&&coord.getY()>=0){
-                quadList.add(2);
-            }else if(coord.getX()<=0){
-                quadList.add(3);
-            }else{
-                quadList.add(4);
-            }
+        // initialize window
+        for (int i = 0; i < clusterSize; i++) {
+            int add = getQuadrant(coordinates[i]);
+            if (quadrants[add] == 0) sum += 1;
+            quadrants[add] += 1;
+            if(sum>quadsThreshold) return true;
         }
 
-        HashSet<Integer> h = new HashSet<Integer>();
+        // move window
+        for (int i = 0; i < coordinates.length- clusterSize; i++) {
+            int remove = getQuadrant(coordinates[i]);
+            int add = getQuadrant(coordinates[i+clusterSize]);
+            if (quadrants[add] == 0) sum += 1;
+            if (quadrants[remove] == 1) sum -= 1;
 
-        for(int i=0;i<=coordinates.length-clusterSize;i++){
-            h.addAll(quadList.subList(i, i+clusterSize));
-            if(h.size()>quadsThreshold) return true;
-            h.clear();
+            quadrants[remove] -= 1;
+            quadrants[add] += 1;
+            if(sum>quadsThreshold) return true;
         }
         return false;
+    }
+
+    /**
+     * Get the Quadrant 0-3 mainly used for LIC4
+     * @param coord     the datapoint
+     * @return          index of quadrant of datapoint, prioritizing lower index for datapoint on axis
+     */
+    public static int getQuadrant(Point2D coord) {
+        if(coord.getX()>=0&&coord.getY()>=0){
+            return 0;
+        }else if(coord.getX()<0&&coord.getY()>=0){
+            return 1;
+        }else if(coord.getX()<=0){
+            return 2;
+        }else{
+            return 3;
+        }
     }
     
     /**
