@@ -236,10 +236,10 @@ public class EvaluateLIC {
         if (numPoints < 5) {
             return false;
         }
-        for (int i = cPts; i < numPoints - dPts; i++) {
+        for (int i = cPts + 1; i < numPoints - dPts - 1; i++) {
             Point2D pt1 = coordinates[i]; // vertex
-            Point2D pt2 = coordinates[i - cPts]; // left
-            Point2D pt3 = coordinates[i + dPts]; // right
+            Point2D pt2 = coordinates[i - cPts - 1]; // left
+            Point2D pt3 = coordinates[i + dPts + 1]; // right
 
             // If either the first point or the last point (or both)
             // coincide with the vertex, the angle is undefined and the LIC
