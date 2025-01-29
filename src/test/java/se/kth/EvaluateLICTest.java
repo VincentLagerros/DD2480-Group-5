@@ -77,7 +77,7 @@ public class EvaluateLICTest {
         assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
-  // ---------------------------------------------------- LIC6 ----------------------------------------------------
+    //Tests for LIC3
     @Test
     public void testLIC3Positive() {
         //Case where a valid input is given
@@ -118,57 +118,8 @@ public class EvaluateLICTest {
         assertFalse(m.LIC3(coordinates, area));
     }
 
-    // Tests for LIC5
-    @Test
-    public void testLIC5Positive(){
-        // Case with points so that X[j] < X[i], i = j - 1 
-        EvaluateLIC m = new EvaluateLIC();
-        Point2D[] coordinates = new Point2D.Double[3];
-        coordinates[0] = new Point2D.Double(1, 0);
-        coordinates[1] = new Point2D.Double(2, 0);
-        coordinates[2] = new Point2D.Double(1.5, 0);
-
-        assertTrue(m.LIC5(coordinates));
-    }
-
-    @Test
-    public void testLIC5PositiveLast(){
-        // Case with points so that X[j] < X[i], i = j - 1 occurs at the final position in the array
-        EvaluateLIC m = new EvaluateLIC();
-        Point2D[] coordinates = new Point2D.Double[6];
-        coordinates[0] = new Point2D.Double(1, 0);
-        coordinates[1] = new Point2D.Double(2, 0);
-        coordinates[2] = new Point2D.Double(3, 0);
-        coordinates[3] = new Point2D.Double(4, 0);
-        coordinates[4] = new Point2D.Double(5, 0);
-        coordinates[5] = new Point2D.Double(1, 0);
-
-        assertTrue(m.LIC5(coordinates));
-    }
-
-    @Test
-    public void testLIC5Negative(){
-        // Case with no points so that X[j] < X[i], i = j - 1 
-        EvaluateLIC m = new EvaluateLIC();
-        Point2D[] coordinates = new Point2D.Double[3];
-        coordinates[0] = new Point2D.Double(1, 0);
-        coordinates[1] = new Point2D.Double(2, 0);
-        coordinates[2] = new Point2D.Double(3, 0);
-
-        assertFalse(m.LIC5(coordinates));
-    }
-
-    @Test
-    public void testLIC5NegativeShort(){
-        // Negative case with single point
-        EvaluateLIC m = new EvaluateLIC();
-        Point2D[] coordinates = new Point2D.Double[1];
-        coordinates[0] = new Point2D.Double(1, 0);
-
-        assertFalse(m.LIC5(coordinates));
-    }
-
-    // Tests for LIC6
+    
+    //Test for LIC4
     @Test
     public void testExeptLIC4(){
         EvaluateLIC eval = new EvaluateLIC();
@@ -237,6 +188,59 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC4(coordinates, 4, 3));
         assertTrue(eval.LIC4(coordinates, 3, 2));
     }
+
+    // Tests for LIC5
+    @Test
+    public void testLIC5Positive(){
+        // Case with points so that X[j] < X[i], i = j - 1 
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[3];
+        coordinates[0] = new Point2D.Double(1, 0);
+        coordinates[1] = new Point2D.Double(2, 0);
+        coordinates[2] = new Point2D.Double(1.5, 0);
+
+        assertTrue(m.LIC5(coordinates));
+    }
+
+    @Test
+    public void testLIC5PositiveLast(){
+        // Case with points so that X[j] < X[i], i = j - 1 occurs at the final position in the array
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[6];
+        coordinates[0] = new Point2D.Double(1, 0);
+        coordinates[1] = new Point2D.Double(2, 0);
+        coordinates[2] = new Point2D.Double(3, 0);
+        coordinates[3] = new Point2D.Double(4, 0);
+        coordinates[4] = new Point2D.Double(5, 0);
+        coordinates[5] = new Point2D.Double(1, 0);
+
+        assertTrue(m.LIC5(coordinates));
+    }
+
+    @Test
+    public void testLIC5Negative(){
+        // Case with no points so that X[j] < X[i], i = j - 1 
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[3];
+        coordinates[0] = new Point2D.Double(1, 0);
+        coordinates[1] = new Point2D.Double(2, 0);
+        coordinates[2] = new Point2D.Double(3, 0);
+
+        assertFalse(m.LIC5(coordinates));
+    }
+
+    @Test
+    public void testLIC5NegativeShort(){
+        // Negative case with single point
+        EvaluateLIC m = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[1];
+        coordinates[0] = new Point2D.Double(1, 0);
+
+        assertFalse(m.LIC5(coordinates));
+    }
+
+    // Tests for LIC6
+    
 
     @Test
     public void testLIC6Positive() {
