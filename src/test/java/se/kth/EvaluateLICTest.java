@@ -1,12 +1,11 @@
 package se.kth;
 
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import java.util.Arrays;    
+import org.junit.Test;    
 
 // Class for all unit tests relating to LIC evaluation
 public class EvaluateLICTest {
@@ -75,6 +74,63 @@ public class EvaluateLICTest {
         globals.parameters.LENGTH1 = 1;
 
         assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
+    }
+
+  // ---------------------------------------------------- LIC1 ----------------------------------------------------
+
+    @Test
+    public void testLIC1TrueForTriangleOutsideRadius() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 4, 2};
+        globals.yCoordinates = new double[]{0, 0, 3};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 1;
+
+        assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1FalseForTriangleInsideRadius() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 2, 1};
+        globals.yCoordinates = new double[]{0, 0, 1};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 2;
+
+        assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1TrueForMultipleTrianglesWithOneExceedingRadius() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1, 2, 6};
+        globals.yCoordinates = new double[]{0, 1, 0, 6};
+        globals.numPoints = 4;
+        globals.parameters.RADIUS1 = 2.5;
+
+        assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1FalseForPointsOnSingleLine() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 2, 4};
+        globals.yCoordinates = new double[]{0, 0, 0};
+        globals.numPoints = 3;
+        globals.parameters.RADIUS1 = 1;
+
+        assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
+    }
+
+    @Test
+    public void testLIC1FalseForInsufficientPoints() {
+        GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
+        globals.xCoordinates = new double[]{0, 1};
+        globals.yCoordinates = new double[]{0, 1};
+        globals.numPoints = 2;
+        globals.parameters.RADIUS1 = 1;
+
+        assertFalse(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
     }
 
   // ---------------------------------------------------- LIC6 ----------------------------------------------------

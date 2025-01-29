@@ -8,10 +8,8 @@ public class EvaluateLIC {
      * 
      * There exists at least one set of two consecutive data points that are 
      * a distance greater than the length, LENGTH1, apart.
-     * 
-     * @param xCoordinates An array of the x-coordinates for the datapoints
-     * @param yCoordinates An array of the y-coordinates for the datapoints
-     * @param numPoints Number of datapoints
+     *
+     * @param coordinates a Point2D array of the x- and y-coordinates for the datapoints
      * @param length1 length to check against
      * @return true if there exists two consecutive datapoints where the Euclidean 
      *         distance dist > length1 otherwise false
@@ -34,8 +32,52 @@ public class EvaluateLIC {
             }
         }
         return false;
+    }    
+
+    /**
+     * There exists at least one set of three consecutive data points that 
+     * cannot all be contained within or on a circle of radius RADIUS1.
+     * @param coordinates a Point2D array of the x- and y-coordinates for the datapoints
+     * @param radius1 radius to check against
+     * @return true if the circumradius is larger than radius1, otherwise return false
+     */
+    public static boolean LIC1(Point2D[] coordinates, double radius1) {
+        assert coordinates != null;
+        assert radius1 >= 0;
+
+        if (coordinates.length < 3) {
+            return false;
+        }
+
+        for (int i = 0; i < coordinates.length - 2; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + 1];
+            Point2D pt3 = coordinates[i + 2];
+
+            // Calculate length of all sides in the triangle
+            double a = pt1.distance(pt2);
+            double b = pt2.distance(pt3);
+            double c = pt3.distance(pt1);
+
+            // Heron's formula
+            double s = (a + b + c) / 2;
+            double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+
+            // If the area is zero since points are on a straight line.
+            // They can fit into any circle.
+            if (area == 0) {
+                continue;
+            }
+
+            double circumradius = (a * b * c) / (4 * area);
+
+            if (circumradius > radius1) {
+                return true;
+            }
+        }
+        return false;
     }
-    
+
     /**
      * Calculates if there exists three consecutive datapoints where the triangle formed from
      * using them as vertices has an area that exceeds the specified area threshold.
@@ -66,7 +108,7 @@ public class EvaluateLIC {
 
     /**
      * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]), 
-     * suchthat X[j] - X[i] < 0. (where i = j-1)
+     * such that X[j] - X[i] < 0. (where i = j-1)
      *
      * @param coordinates   An array of the coordinates for the datapoints
      * @return              True if such a set exists, False otherwise
