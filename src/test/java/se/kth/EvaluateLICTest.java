@@ -465,11 +465,10 @@ public class EvaluateLICTest {
         EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[5];
         coordinates[0] = new Point2D.Double(0.0, 0.0);
-        coordinates[1] = new Point2D.Double(1.0, 0.0);
-        coordinates[2] = new Point2D.Double(1.0, 1.0);
-        // numPoints >= 5
-        coordinates[3] = new Point2D.Double(1.0, 1.0);
+        coordinates[2] = new Point2D.Double(1.0, 0.0);
         coordinates[4] = new Point2D.Double(1.0, 1.0);
+        coordinates[1] = new Point2D.Double(1.0, 1.0);
+        coordinates[3] = new Point2D.Double(1.0, 1.0);
         assertTrue(eval.LIC9(coordinates, 1, 1, 0.0));
         assertFalse(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 + 0.1));
         assertTrue(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 - 0.1));
