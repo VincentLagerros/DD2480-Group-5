@@ -51,6 +51,27 @@ public class EvaluateLICTest {
     }
 
     @Test
+    public void testExeptLIC4(){
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        // clusterSize is to small
+        try{
+            eval.LIC4(coordinates, 1, 2);
+        } catch(AssertionError e){
+            assertTrue(e.getMessage()==null || e.getMessage().contains("assert"));
+        }
+
+        // quadsThreshold is too large
+        try{
+            eval.LIC4(coordinates, 2, 4);
+        } catch(AssertionError e){
+            assertTrue(e.getMessage()==null || e.getMessage().contains("assert"));
+        }
+
+    }
+
+    @Test
     public void testLIC4Positive() {
         //Case where at least one cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
         EvaluateLIC eval = new EvaluateLIC();
