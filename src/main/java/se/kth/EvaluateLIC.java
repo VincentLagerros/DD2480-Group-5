@@ -184,6 +184,36 @@ public class EvaluateLIC {
         return false;
     }
 
+
+    /**
+     * Calculates if there exists at least one set of two data points separated by exactly kPts consecutive 
+     * intervening points that are a distance greater than the length, lenght1, apart. 
+     * The conditionis not met when numPoints < 3.
+     *
+     * @param coordinates   an array of the coordinates for the datapoints 
+     * @param kPts          Number of consecutive intervening datapoints sperating the points compared (1 ≤ kPts ≤ (numPoints - 2)
+     * @param lenght1       Length of minimum distance between the two separated points
+     * @return              True if such a point exists, False otherwise
+     */
+    public boolean LIC7(Point2D[] coordinates, int kPts, double length1){
+        int numPoints = coordinates.length;
+        if(numPoints < 3){
+            return false;
+        }
+        
+        assert kPts >= 1;
+        assert kPts <= numPoints - 2;
+
+        for(int i = 0; i < numPoints - kPts -1; i++){
+            double distance = coordinates[i].distance(coordinates[i+kPts+1]);
+            if(distance > length1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * There exists at least one set of three data points separated by exactly C_PTS and D_PTS
      * consecutive intervening points, respectively, that form an angle such that:
