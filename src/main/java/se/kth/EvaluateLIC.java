@@ -258,4 +258,63 @@ public class EvaluateLIC {
         }
         return false;
     }
+
+    public boolean LIC13(Point2D[] coordinates, int aPts, int bPts, double radius1, double radius2){
+        assert radius2 >=0;
+        if(coordinates.length<5) return false;
+
+        boolean condition1 = false;
+        boolean condition2 = false;
+
+        for(int i = aPts + 1; i < coordinates.length - bPts - 1;i++){
+            Point2D pt1 = coordinates[i-aPts-1];
+            Point2D pt2 = coordinates[i];
+            Point2D pt3 = coordinates[i+bPts+1];
+            
+            double a = pt1.distance(pt2);
+            double b = pt2.distance(pt3);
+            double c = pt3.distance(pt1);
+            
+            Point2D[] points = new Point2D[3];
+
+            if(a>=b&&a>=c){
+                points[0] = pt1;
+                points[1] = pt2;
+                points[2] = pt3;
+            }else if(b>=a&&b>=c){
+                points[0] = pt2;
+                points[1] = pt3;
+                points[2] = pt1;
+            }else if(c>=a&&c>=b){
+                points[0] = pt1;
+                points[1] = pt3;
+                points[2] = pt2;
+            }
+
+            Point2D mid = new Point2D.Double(0.5*(points[0].getX()+points[1].getX()), 0.5*(points[0].getY()+points[1].getY()));
+            double minRadiusA = points[0].distance(mid);
+            if(mid.distance(points[2])<=minRadiusA){
+                if(minRadiusA<=radius1){
+                    condition1 = true;
+                }
+                if(minRadiusA<=radius2){
+                    condition2 = true;
+                }
+            }
+            if(condition1&&condition2) return true;
+
+            double k = 0.5 * (Math.abs(pt1.getX() * pt2.getY() + pt2.getX() * pt3.getY() + pt3.getX() * pt1.getY() - pt1.getX() * pt3.getY() - pt2.getX() *
+            pt1.getY() - pt3.getX() * pt2.getY()));
+
+            double minRadiusB = (a*b*c)/(4*k);
+
+            if(minRadiusB<=radius1){
+                condition1 = true;
+            } 
+            if(minRadiusB<=radius2){
+                condition2 = true;
+            }
+        }
+        return (condition1 && condition2);
+    }
 }
