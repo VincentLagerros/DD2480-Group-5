@@ -125,6 +125,34 @@ public class EvaluateLICTest {
         assertNotEquals(eval.LIC2(coordinates,epsilon1), eval.LIC2(coordinates,epsilon2));
     }
 
+    @Test
+    public void testExceptLIC2() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 2 tests for bad inputs, epsilon < 0, epsilon < Math.PI
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0)
+        };
+  
+        double epsilon1 = -1;
+        double epsilon2 = Math.PI + 1;
+
+
+        // epsilon < 0
+        try {
+            eval.LIC2(coordinates,epsilon1);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // epsilon > Math.PI 
+        try {
+            eval.LIC2(coordinates,epsilon2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+    }
+
 
   // ---------------------------------------------------- LIC3 ----------------------------------------------------
     @Test
