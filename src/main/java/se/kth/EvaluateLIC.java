@@ -221,4 +221,37 @@ public class EvaluateLIC {
         }
         return false;
     }
+
+    /**
+    * There exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
+    * exactly gPts consecutive intervening points, such that X[j] - X[i] < 0. (where i < j ) The
+    * condition is not met when NUMPOINTS < 3.
+    *
+    * @param coordinates   An array of the coordinates for the datapoints
+    * @param gPts          Number of point seperating the evaluated points
+    * @return              True if such a set exists, False otherwise
+    */
+   public boolean LIC11(Point2D[] coordinates, int gPts){
+       int numPoints = coordinates.length;
+
+       // Condition is not met when NUMPOINTS < 3
+       if(numPoints < 3){
+           return false;
+       }
+        
+       // Validating input
+       // This must be done after numPoints is checked due to edge Case, if numPoints = 3 then gPts = 2 is invalid, 
+       // rather than an assertion error. 
+       assert gPts >= 1;
+       assert gPts <= numPoints - 2;
+
+
+       for(int i = 0; i < numPoints - gPts - 1; i++){
+           // LIC condition
+           if(coordinates[i + gPts + 1].getX() - coordinates[i].getX() < 0){
+               return true;
+           }
+       }
+      return false;
+   }
 }

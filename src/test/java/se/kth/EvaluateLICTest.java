@@ -392,4 +392,74 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC10(coordinates, ePts, fPts,area1));
     }
 
+    // ---------------------------------------------------- LIC11 ----------------------------------------------------
+    @Test
+    public void testLIC11positive() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Positive input points, checks multiple cases including when j is last, and when i is first in the array
+        Point2D[] coordinates = {
+            new Point2D.Double(11, 0), 
+            new Point2D.Double(10, 5), 
+            new Point2D.Double(-1, 10),
+            new Point2D.Double(8, 10),
+            new Point2D.Double(10, 10)
+        };
+        int gPts1 = 1;
+        int gPts2 = 2;
+        int gPts3 = 3; // Maximum valid gPts for these points
+
+        assertTrue(eval.LIC11(coordinates, gPts1));
+        assertTrue(eval.LIC11(coordinates, gPts2));
+        assertTrue(eval.LIC11(coordinates, gPts3));
+    }
+
+    @Test
+    public void testLIC11LargeD() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Large array with negative input points
+        Point2D[] coordinates = new Point2D[1000];
+
+        // Increasing x values -> function should return false
+        for (int i = 0; i < 1000; i++) {
+            coordinates[i] = new Point2D.Double(i, 0);
+        }
+        int gPts = 10;
+
+        assertFalse(eval.LIC11(coordinates, gPts));
+    }
+
+    @Test
+    public void testLIC11negative() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Negative input points, checks multiple cases including when j is last, and when i is first in the array
+        Point2D[] coordinates = {
+            new Point2D.Double(-1, 0), 
+            new Point2D.Double(0, 5), 
+            new Point2D.Double(2, 10),
+            new Point2D.Double(3, -10),
+            new Point2D.Double(1000, 10)
+        };
+        int gPts1 = 1;
+        int gPts2 = 2;
+        int gPts3 = 3; // Maximum valid gPts for these points
+
+        assertFalse(eval.LIC11(coordinates, gPts1));
+        assertFalse(eval.LIC11(coordinates, gPts2));
+        assertFalse(eval.LIC11(coordinates, gPts3));
+    }
+
+    @Test
+    public void testLIC11negativeMin() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Negative input numpoints = 2
+        Point2D[] coordinates = {
+            new Point2D.Double(-1, 0), 
+            new Point2D.Double(0, 5), 
+            new Point2D.Double(2, 10),
+        };
+        int gPts1 = 1;
+
+        assertFalse(eval.LIC11(coordinates, gPts1));
+    }
+
 }
