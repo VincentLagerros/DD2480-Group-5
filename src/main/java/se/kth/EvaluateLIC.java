@@ -258,4 +258,77 @@ public class EvaluateLIC {
         }
         return false;
     }
+
+    /**
+     * There exists at least one set of three data points separated by exactly E PTS and F PTS 
+     * consecutive intervening points, respectively, that are the vertices of a triangle with 
+     * area greater than AREA1. The condition is not met when NUMPOINTS < 5.
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param ePts        number of consecutive points between the first and second selected point, 1 ≤ E PTS, E PTS+F PTS ≤ NUMPOINTS−3
+     * @param fPts        represents the number of consecutive points between the second and third selected point, 1 ≤ F PTS, E PTS+F PTS ≤ NUMPOINTS−3     
+     * @param area1       area used to compare with
+     * @return            If three data points can be found following the conditions
+     */
+    public boolean LIC10(Point2D[] coordinates, int ePts, int fPts, double area1) {
+        assert coordinates != null;
+        int numPoints = coordinates.length;
+        if (numPoints < 5) {
+            return false;
+        }
+
+        assert ePts >= 1;
+        assert fPts >= 1;
+        assert ePts + fPts <= numPoints - 3;
+
+        for (int i = 0; i < numPoints - ePts - fPts - 2; i++) {
+            Point2D pt1 = coordinates[i]; //0
+            Point2D pt2 = coordinates[i + ePts + 1]; // 3
+            Point2D pt3 = coordinates[i + ePts + fPts + 2]; // 5
+            
+            // https://www.cuemath.com/geometry/area-of-triangle-in-coordinate-geometry/
+            double area = (0.5) * Math.abs(
+                                            pt1.getX() * (pt2.getY() - pt3.getY()) +
+                                            pt2.getX() * (pt3.getY() - pt1.getY()) + 
+                                            pt3.getX() * (pt1.getY() - pt2.getY()));
+            // LIC condition
+            if( area > area1){
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    /**
+    * There exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
+    * exactly gPts consecutive intervening points, such that X[j] - X[i] < 0. (where i < j ) The
+    * condition is not met when NUMPOINTS < 3.
+    *
+    * @param coordinates   An array of the coordinates for the datapoints
+    * @param gPts          Number of point seperating the evaluated points
+    * @return              True if such a set exists, False otherwise
+    */
+   public boolean LIC11(Point2D[] coordinates, int gPts){
+       int numPoints = coordinates.length;
+
+       // Condition is not met when NUMPOINTS < 3
+       if(numPoints < 3){
+           return false;
+       }        
+       // Validating input
+       // This must be done after numPoints is checked due to edge Case, if numPoints = 3 then gPts = 2 is invalid, 
+       // rather than an assertion error. 
+       assert gPts >= 1;
+       assert gPts <= numPoints - 2;
+
+
+       for(int i = 0; i < numPoints - gPts - 1; i++){
+           // LIC condition
+           if(coordinates[i + gPts + 1].getX() - coordinates[i].getX() < 0){
+               return true;
+           }
+       }
+      return false;
+   }
 }
