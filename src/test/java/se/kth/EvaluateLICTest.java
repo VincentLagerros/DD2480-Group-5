@@ -3,6 +3,7 @@ package se.kth;
 import java.awt.geom.Point2D;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -77,7 +78,83 @@ public class EvaluateLICTest {
         assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
-  // ---------------------------------------------------- LIC6 ----------------------------------------------------
+   // ---------------------------------------------------- LIC2 ----------------------------------------------------
+   @Test
+   public void testLIC2Positive(){
+       EvaluateLIC eval = new EvaluateLIC();
+       Point2D[] coordinates = new Point2D.Double[4];
+
+       coordinates[0] = new Point2D.Double(0, 0.1);
+       coordinates[1] = new Point2D.Double(0, 0);
+       coordinates[2] = new Point2D.Double(0, 0.2);
+       coordinates[3] = new Point2D.Double(4, 4);
+
+       double epsilon = 0.1;
+
+       assertTrue(eval.LIC2(coordinates,epsilon));
+   }
+
+   @Test
+   public void testLIC2Negative(){
+       EvaluateLIC eval = new EvaluateLIC();
+       Point2D[] coordinates = new Point2D.Double[5];
+
+       coordinates[0] = new Point2D.Double(0, 1);
+       coordinates[1] = new Point2D.Double(0, 0);
+       coordinates[2] = new Point2D.Double(1, 0);
+       coordinates[3] = new Point2D.Double(2, 2);
+       coordinates[4] = new Point2D.Double(3, 3);
+
+       double epsilon = 2.0;
+
+       assertFalse(eval.LIC2(coordinates,epsilon));
+   }
+
+   @Test
+    public void testLIC2Epsilon(){
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[3];
+
+        coordinates[0] = new Point2D.Double(0, 1);
+        coordinates[1] = new Point2D.Double(0, 0);
+        coordinates[2] = new Point2D.Double(1, 0);
+
+        double epsilon1 = 1.0;
+        double epsilon2 = 3.0;
+
+        assertNotEquals(eval.LIC2(coordinates,epsilon1), eval.LIC2(coordinates,epsilon2));
+    }
+
+    @Test
+    public void testExceptLIC2() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 2 tests for bad inputs, epsilon < 0, epsilon < Math.PI
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0)
+        };
+  
+        double epsilon1 = -1;
+        double epsilon2 = Math.PI + 1;
+
+
+        // epsilon < 0
+        try {
+            eval.LIC2(coordinates,epsilon1);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // epsilon > Math.PI 
+        try {
+            eval.LIC2(coordinates,epsilon2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+    }
+
+
+  // ---------------------------------------------------- LIC3 ----------------------------------------------------
     @Test
     public void testLIC3Positive() {
         //Case where a valid input is given
