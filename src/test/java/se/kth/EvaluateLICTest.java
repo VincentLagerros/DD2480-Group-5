@@ -197,6 +197,77 @@ public class EvaluateLICTest {
         assertFalse(m.LIC3(coordinates, area));
     }
 
+    
+    //Test for LIC4
+    @Test
+    public void testExeptLIC4(){
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        // clusterSize is to small
+        try{
+            eval.LIC4(coordinates, 1, 2);
+        } catch(AssertionError e){
+            assertTrue(e.getMessage()==null || e.getMessage().contains("assert"));
+        }
+
+        // quadsThreshold is too large
+        try{
+            eval.LIC4(coordinates, 2, 4);
+        } catch(AssertionError e){
+            assertTrue(e.getMessage()==null || e.getMessage().contains("assert"));
+        }
+
+    }
+
+    @Test
+    public void testLIC4Positive() {
+        //Case where at least one cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(-1, 2);
+        coordinates[2] = new Point2D.Double(2, 1);
+        coordinates[3] = new Point2D.Double(3, -2);
+
+        assertTrue(eval.LIC4(coordinates, 3, 2));
+        assertTrue(eval.LIC4(coordinates, 2, 1));
+        assertTrue(eval.LIC4(coordinates, 4, 2));
+    }
+    
+    @Test
+    public void testLIC4Negative() {
+        //Case where no cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 2);
+        coordinates[2] = new Point2D.Double(-2, -1);
+        coordinates[3] = new Point2D.Double(-3, -2);
+
+        assertFalse(eval.LIC4(coordinates, 3, 2));
+        assertFalse(eval.LIC4(coordinates, 4, 2));
+        assertFalse(eval.LIC4(coordinates, 4, 3));
+    }
+
+    @Test
+    public void testLIC4AxisCoordinates() {
+        //Case where coordinates lie on an axis between two quadrants
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(0, 2);
+        coordinates[2] = new Point2D.Double(-2, 0);
+        coordinates[3] = new Point2D.Double(0, -2);
+
+        assertTrue(eval.LIC4(coordinates, 2, 1));
+        assertFalse(eval.LIC4(coordinates, 4, 3));
+        assertTrue(eval.LIC4(coordinates, 3, 2));
+    }
+
     // Tests for LIC5
     @Test
     public void testLIC5Positive(){

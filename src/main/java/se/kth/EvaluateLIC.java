@@ -1,6 +1,8 @@
 package se.kth;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class EvaluateLIC {
 
@@ -111,6 +113,66 @@ public class EvaluateLIC {
         return false;
     }
 
+    /**
+     * Calculates if there is a cluster of consecutive datapoints that are in more than 
+     * quadrantThreshold different quadrants. If a datapoint is between two quadrants
+     * then priority is given to quadrant with lower number.
+     * 
+     * @param coordinates       an array of the coordinates for the datapoints
+     * @param clusterSize       the size of the cluster of consecutive coordinates
+     * @param quadsThreshold    the number of quadrants to be exceed
+     * @return                  true if a cluster of coordinates are in more quadrants than quadsThreshold,
+     *                          otherwise false
+     */
+    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsThreshold){
+        assert clusterSize >=2;
+        assert coordinates.length >= clusterSize;
+        assert quadsThreshold >=1;
+        assert quadsThreshold <=3;
+        if(clusterSize<=quadsThreshold) return false;
+
+        int[] quadrants = {0,0,0,0};
+        int sum = 0;
+
+        // initialize window
+        for (int i = 0; i < clusterSize; i++) {
+            int add = getQuadrant(coordinates[i]);
+            if (quadrants[add] == 0) sum += 1;
+            quadrants[add] += 1;
+            if(sum>quadsThreshold) return true;
+        }
+
+        // move window
+        for (int i = 0; i < coordinates.length- clusterSize; i++) {
+            int remove = getQuadrant(coordinates[i]);
+            int add = getQuadrant(coordinates[i+clusterSize]);
+            if (quadrants[add] == 0) sum += 1;
+            if (quadrants[remove] == 1) sum -= 1;
+
+            quadrants[remove] -= 1;
+            quadrants[add] += 1;
+            if(sum>quadsThreshold) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the Quadrant 0-3 mainly used for LIC4
+     * @param coord     the datapoint
+     * @return          index of quadrant of datapoint, prioritizing lower index for datapoint on axis
+     */
+    public static int getQuadrant(Point2D coord) {
+        if(coord.getX()>=0&&coord.getY()>=0){
+            return 0;
+        }else if(coord.getX()<0&&coord.getY()>=0){
+            return 1;
+        }else if(coord.getX()<=0){
+            return 2;
+        }else{
+            return 3;
+        }
+    }
+    
     /**
      * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]), 
      * suchthat X[j] - X[i] < 0. (where i = j-1)
