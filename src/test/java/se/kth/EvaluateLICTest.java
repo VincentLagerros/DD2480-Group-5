@@ -6,6 +6,8 @@ import java.util.Arrays;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 // Class for all unit tests relating to LIC evaluation
@@ -894,6 +896,87 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC11(coordinatesShort, gPts2));
     }
 
+    // ---------------------------------------------------- LIC13 ----------------------------------------------------
+    
+ // Tests for LIC13
+    @Test
+    public void testLIC13SameCircle() {
+        // Case whith guaranteed unpassable or guaranteed passable radiuses
+        EvaluateLIC eval = new EvaluateLIC();
+
+        Point2D[] coordinates = {
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 1),
+                new Point2D.Double(1, 1),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+        };
+        assertFalse(eval.LIC13(coordinates, 0, 0, 1e10, 0.0));
+        assertTrue(eval.LIC13(coordinates, 0, 0, 0, 1e10));
+    }
+
+    @Test
+    public void testLIC13DifferentCircle() {
+        // Case where different radiuses are used
+        EvaluateLIC eval = new EvaluateLIC();
+
+        Point2D[] coordinates = {
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 1),
+                new Point2D.Double(1, 1),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 10),
+                new Point2D.Double(10, 10),
+        };
+        assertTrue(eval.LIC13(coordinates, 0, 0, 5.0, 1.0));
+        assertFalse(eval.LIC13(coordinates, 0, 0, 5.0, 0.0));
+        assertFalse(eval.LIC13(coordinates, 0, 0, 10.0, 1.0));
+    }
+
+    @Test
+    public void testLIC13StackedPoints() {
+        // Case where datapoints are overlapping
+        EvaluateLIC eval = new EvaluateLIC();
+
+        Point2D[] coordinates = {
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0)
+        };
+        assertFalse(eval.LIC13(coordinates, 0, 0, 0.0, 0.0));
+    }
+
+    @Test
+    public void testLIC13InvalidInput() {
+        EvaluateLIC eval = new EvaluateLIC();
+
+        Point2D[] coordinates1 = {
+                new Point2D.Double(0, 0),
+        };
+
+        // invalid length for datapoints array
+        assertFalse(eval.LIC13(coordinates1, 0, 0, 0.0, 0.0));
+
+        Point2D[] coordinates2 = {
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(0, 0),
+        };
+
+        // invalid second radius
+        try {
+            eval.LIC13(coordinates2, 0, 0, 0.0, -1.0);
+            fail("Should crash");
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+    }
+
+    // ---------------------------------------------------- LIC14 ----------------------------------------------------
     @Test
     public void testLIC14SameTriangle() {
         EvaluateLIC eval = new EvaluateLIC();
