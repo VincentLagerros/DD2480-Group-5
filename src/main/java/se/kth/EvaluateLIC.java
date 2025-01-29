@@ -133,12 +133,12 @@ public class EvaluateLIC {
      */
     public boolean LIC7(Point2D[] coordinates, int kPts, double length1){
         int numPoints = coordinates.length;
-        assert kPts >= 1;
-        assert kPts <= numPoints - 2;
-        
         if(numPoints < 3){
             return false;
         }
+        
+        assert kPts >= 1;
+        assert kPts <= numPoints - 2;
 
         for(int i = 0; i < numPoints - kPts -1; i++){
             double xVector = coordinates[i+kPts+1].getX() - coordinates[i].getX();
