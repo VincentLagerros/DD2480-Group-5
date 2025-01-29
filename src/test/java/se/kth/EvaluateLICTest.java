@@ -266,7 +266,47 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC6(coordinates, nPts, dist));
     }
 
+    @Test
+    public void testExceptLIC6() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 3 tests for bad inputs, 0 > dist, nPts < 3, nPts > numPoints
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0),
+            new Point2D.Double(2, 0),
+            new Point2D.Double(2, 0),
+            new Point2D.Double(2, 0)
+        };
+        int nPts1 = 3;
+        int nPts2 = 2;
+        int nPts3 = 6;
+        double dist1 = -2;
+        double dist2 = 2;
 
+
+        // 0 > dist
+        try {
+            eval.LIC6(coordinates, nPts1, dist1);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // nPts < 3
+        try {
+            eval.LIC6(coordinates, nPts2, dist2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // nPts > numPoints
+        try {
+            eval.LIC6(coordinates, nPts3, dist2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+    }
+    
+    // ---------------------------------------------------- LIC9 ----------------------------------------------------
     @Test
     public void testLIC9Coincide() {
         EvaluateLIC eval = new EvaluateLIC();
