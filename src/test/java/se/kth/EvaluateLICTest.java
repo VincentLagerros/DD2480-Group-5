@@ -749,7 +749,57 @@ public class EvaluateLICTest {
         assertFalse(eval.LIC7(coordinates2, kPts2, length1));
     }
 
+  
+  // ---------------------------------------------------- LIC8 ----------------------------------------------------
+    @Test
+    public void testLIC8TrueForTriangleOutsideRadius() {
+        //Points that do not fit inside a circle of radius 0.1
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[5];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(2, 3);
+        coordinates[2] = new Point2D.Double(5, 1);
+        coordinates[3] = new Point2D.Double(7, 4);
+        coordinates[4] = new Point2D.Double(10, 2);
+        int aPts = 1;
+        int bPts = 2;
+        double radius = 0.1;
+        assertTrue(eval.LIC8(coordinates, aPts, bPts, radius));
+    }
+
+    @Test
+    public void testLIC8FalseForTriangleInsideRadius() {
+        //Points that always fit within a circle of radius 10
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[5];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 1);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(3, 1);
+        coordinates[4] = new Point2D.Double(4, 0);
+        int aPts = 1;
+        int bPts = 2;
+        double radius = 10;
+        assertFalse(eval.LIC8(coordinates, aPts, bPts, radius));
+    }
+
+    @Test
+    public void testLIC8FalseForInsufficientPoints() {
+        //Only 4 points (condition requires 5)
+        EvaluateLIC eval = new EvaluateLIC();
+        Point2D[] coordinates = new Point2D.Double[4];
+        coordinates[0] = new Point2D.Double(0, 0);
+        coordinates[1] = new Point2D.Double(1, 1);
+        coordinates[2] = new Point2D.Double(2, 0);
+        coordinates[3] = new Point2D.Double(3, 1);
+        int aPts = 1;
+        int bPts = 2;
+        double radius = 0.1;
+        assertFalse(eval.LIC8(coordinates, aPts, bPts, radius));
+    }
+
     // ---------------------------------------------------- LIC9 ----------------------------------------------------
+
     @Test
     public void testLIC9Coincide() {
         EvaluateLIC eval = new EvaluateLIC();

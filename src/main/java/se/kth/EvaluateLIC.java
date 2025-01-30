@@ -318,6 +318,62 @@ public class EvaluateLIC {
         return false;
     }
 
+    /**
+     * Calculates if there exists at least one set of three data points separated by exactly A_PTS and B_PTS
+     * consecutive intervening points, respectively, that cannot be contained within or on a circle of radius
+     * RADIUS1. The condition is not met when NUMPOINTS < 5.
+     * @param coordinates
+     * @param aPts
+     * @param bPts
+     * @return True if such points exist
+     */
+    public boolean LIC8(Point2D[] coordinates, int aPts, int bPts, double radius) {
+        assert coordinates != null;
+        int numPoints = coordinates.length;
+        assert aPts >= 1;
+        assert bPts >= 1;
+        assert aPts + bPts <= numPoints -3;
+        if (numPoints < 5) {
+            return false;
+        }
+        for (int i = 0; i + aPts + bPts + 2 < numPoints; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + aPts + 1];
+            Point2D pt3 = coordinates[i + aPts + bPts + 2];
+            double ax = pt1.getX(), ay = pt1.getY();
+            double bx = pt2.getX(), by = pt2.getY();
+            double cx = pt3.getX(), cy = pt3.getY();
+            double a = pt1.distance(pt2);
+            double b = pt2.distance(pt3);
+            double c = pt3.distance(pt1);
+
+            // https://en.wikipedia.org/wiki/Circumcircle 
+            double d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by));
+            // If the points are collinear
+            if (d == 0) {
+                double largestDistance = Math.max(a, Math.max(b, c));
+
+                if (largestDistance > radius1 * 2) {
+                    return true; // The points cannot be contained in the circle
+                }
+                
+                continue;
+            }
+            //Coordinates for circumcenter
+            double ux = ((ax * ax + ay * ay) * (by - cy) +
+                (bx * bx + by * by) * (cy - ay) +
+                (cx * cx + cy * cy) * (ay - by)) / d;
+            double uy = ((ax * ax + ay * ay) * (cx - bx) +
+                (bx * bx + by * by) * (ax - cx) +
+                (cx * cx + cy * cy) * (bx - ax)) / d;
+
+            double circumradius = pt1.distance(ux, uy); // Circumradius is distance from circumcenter to any point
+            if (circumradius > radius) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * There exists at least one set of three data points separated by exactly C_PTS and D_PTS
