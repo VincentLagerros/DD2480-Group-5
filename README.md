@@ -10,6 +10,20 @@ There are four assignments:
 
 ---
 
+### Contributions
+
+* Julia has written a few LICs and their corresponding tests, the global variables and their corresponding tests, the DECIDE function in main file, written on the README and reviewed pull-requests.
+
+* Rasmuss created LIC methods and related test cases. All test cases test negative input, positive input, and input validation. Also revwied pull requests.
+
+* Erik has written three LIC3, LIC4 and LIC13 functions and their respective test cases. Also reviewed pull requests.
+
+* Vincent wrote a few LICs and test, but also worked on refactoring and the core structure of the project. However mainly reviewed pull requests.
+
+* Fiona created one LIC function and related test cases, and reviewed pull requests.
+
+---
+
 ### DECIDE
 This project implements a **Launch Interceptor Program** in Java. Key features include:
 - **Global Variable Declarations**: Logical structures such as matrices and boolean arrays are used to handle complex decision-making processes.
