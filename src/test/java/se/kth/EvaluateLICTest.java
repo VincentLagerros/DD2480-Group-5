@@ -967,6 +967,8 @@ public class EvaluateLICTest {
         int gPts1 = -1;
         int gPts2 = 5;
 
+
+
         // gPts < 1
         try {
             assertFalse(eval.LIC11(coordinates, gPts1));
@@ -980,19 +982,6 @@ public class EvaluateLICTest {
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
-
-
-        // negative kPts
-        try {
-            eval.LIC12(coordinates, kPts2, length2);
-        } catch (AssertionError e) {
-            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
-        }
-
-        // numpoints < 3
-        assertFalse(eval.LIC12(coordinates, kPts1, length2));
-        // NUMPOINTS < 5
-        assertFalse(eval.LIC11(coordinatesShort, gPts2));
     }
   
   // ---------------------------------------------------- LIC12 ----------------------------------------------------
@@ -1077,6 +1066,20 @@ public class EvaluateLICTest {
         // negative length1
         try {
             eval.LIC12(coordinates, kPts1, length1);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // negative kPts
+        try {
+            eval.LIC12(coordinates, kPts2, length2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // numpoints < 3
+        assertFalse(eval.LIC12(coordinates, kPts1, length2));
+    } 
 
     // ---------------------------------------------------- LIC13 ----------------------------------------------------
     

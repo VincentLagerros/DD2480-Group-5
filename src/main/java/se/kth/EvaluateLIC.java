@@ -534,6 +534,7 @@ public class EvaluateLIC {
         } else{
             return false;
         }
+    }
 
     /**
      * Calculates if here exists at least one set of three data points, separated by exactly aPts and bPts
