@@ -211,9 +211,7 @@ public class EvaluateLIC {
             Point2D pt1 = coordinates[i]; 
             Point2D pt2 = coordinates[i + kPts + 1]; 
 
-            // point distance formula: https://www.cuemath.com/geometry/distance-between-two-points/
-            double distance = Math.sqrt((Math.pow(pt2.getX() - pt1.getX(), 2)) + (Math.pow(pt2.getY() - pt1.getY(), 2)));
-            
+            double distance = pt1.distance(pt2);
             if(distance > length2){
                 greater = true;
             }
