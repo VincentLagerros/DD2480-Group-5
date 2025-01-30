@@ -402,5 +402,5 @@ public class EvaluateLICTest {
 
         // numpoints < 3
         assertFalse(eval.LIC12(coordinates, kPts1, length2));
-    }
+    } 
 }
