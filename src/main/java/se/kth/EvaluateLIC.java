@@ -330,12 +330,15 @@ public class EvaluateLIC {
     public boolean LIC8(Point2D[] coordinates, int aPts, int bPts, double radius) {
         assert coordinates != null;
         int numPoints = coordinates.length;
-        assert aPts >= 1;
-        assert bPts >= 1;
-        assert aPts + bPts <= numPoints -3;
+        
         if (numPoints < 5) {
             return false;
         }
+
+        assert aPts >= 1;
+        assert bPts >= 1;
+        assert aPts + bPts <= numPoints -3;
+        
         for (int i = 0; i + aPts + bPts + 2 < numPoints; i++) {
             Point2D pt1 = coordinates[i];
             Point2D pt2 = coordinates[i + aPts + 1];
@@ -353,7 +356,7 @@ public class EvaluateLIC {
             if (d == 0) {
                 double largestDistance = Math.max(a, Math.max(b, c));
 
-                if (largestDistance > radius1 * 2) {
+                if (largestDistance > radius * 2) {
                     return true; // The points cannot be contained in the circle
                 }
                 
