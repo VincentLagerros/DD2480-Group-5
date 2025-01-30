@@ -433,6 +433,89 @@ public class EvaluateLIC {
     }
 
     /**
+     * Calculates if here exists at least one set of three data points, separated by exactly aPts and bPts
+     * consecutive intervening points, respectively, that cannot be contained within or on a circle of
+     * radius RADIUS1. In addition, there exists at least one set of three data points (which can be
+     * the same or different from the three data points just mentioned) separated by exactly A PTS
+     * and B PTS consecutive intervening points, respectively, that can be contained in or on a
+     * circle of radius RADIUS2. 
+     * 
+     * @param coordinates   an array of the coordinates for the datapoints
+     * @param aPts          left offset of the center vertex in coordinates
+     * @param bPts          right offset of the center vertex in coordinates
+     * @param radius1       the radius of the circle that cannot contain the three points
+     * @param radius2       the radius of the circle that can contain the three points
+     * @return              true if three points separated by aPts and bPts cannot be contained in circle with radius1 and three points 
+     *                      separated by aPts and bPts can be contained in circle with radius2, otherwise false
+     * 
+     */
+    public boolean LIC13(Point2D[] coordinates, int aPts, int bPts, double radius1, double radius2){
+        assert radius2 >=0;
+        if(coordinates.length<5) return false;
+
+        boolean condition1 = false;
+        boolean condition2 = false;
+
+        
+        for(int i = aPts + 1; i < coordinates.length - bPts - 1;i++){
+            Point2D pt1 = coordinates[i-aPts-1];
+            Point2D pt2 = coordinates[i];
+            Point2D pt3 = coordinates[i+bPts+1];
+            
+            // get distances between points
+            double a = pt1.distance(pt2);
+            double b = pt2.distance(pt3);
+            double c = pt3.distance(pt1);
+            
+            Point2D[] points = new Point2D[3];
+
+            // check for greatest distance
+            if(a>=b&&a>=c){
+                points[0] = pt1;
+                points[1] = pt2;
+                points[2] = pt3;
+            }else if(b>=a&&b>=c){
+                points[0] = pt2;
+                points[1] = pt3;
+                points[2] = pt1;
+            }else if(c>=a&&c>=b){
+                points[0] = pt1;
+                points[1] = pt3;
+                points[2] = pt2;
+            }
+
+            // calculate midpoint between the two points that are furthest apart
+            Point2D mid = new Point2D.Double(0.5*(points[0].getX()+points[1].getX()), 0.5*(points[0].getY()+points[1].getY()));
+            double minRadiusA = points[0].distance(mid);
+
+            // check if third point is within the cicle spanning between the other two
+            if(mid.distance(points[2])<=minRadiusA){
+                if(minRadiusA>radius1){
+                    condition1 = true;
+                }
+                if(minRadiusA<=radius2){
+                    condition2 = true;
+                }
+            }
+            if(condition1&&condition2) return true;
+
+            // calculate triangle area between points
+            double k = getTriangleArea(pt1, pt2, pt3);
+
+            // calculate area of circle with all points on its edge
+            double minRadiusB = (a*b*c)/(4*k);
+
+            if(minRadiusB>radius1){
+                condition1 = true;
+            } 
+            if(minRadiusB<=radius2){
+                condition2 = true;
+            }
+        }
+        return condition1 && condition2;
+    }
+
+    /**
      * Gets the area of the triangle created by the 3 points
      *
      * @param pt1 Point 1
