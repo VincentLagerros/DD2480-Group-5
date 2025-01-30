@@ -1,26 +1,23 @@
 package se.kth;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class EvaluateLIC {
 
     /**
-     * 
-     * There exists at least one set of two consecutive data points that are 
+     * There exists at least one set of two consecutive data points that are
      * a distance greater than the length, LENGTH1, apart.
      *
      * @param coordinates a Point2D array of the x- and y-coordinates for the datapoints
      * @param length1 length to check against
      * @return true if there exists two consecutive datapoints where the Euclidean 
      *         distance dist > length1 otherwise false
-     * 
+     *
      */
     public static boolean LIC0(Point2D[] coordinates, double length1) {
         assert coordinates != null;
         assert length1 >= 0;
-        
+
         if (coordinates.length < 2) {
             return false;
         }
@@ -91,11 +88,11 @@ public class EvaluateLIC {
      * The second of the three consecutive points is always the vertex of the angle. If either the first
      * point or the last point (or both) coincides with the vertex, the angle is undefined and the LIC is not satisfied by those three points.
      *
-     * @param coordinates   an array of the coordinates for the datapoints 
-     * @param epsilon       Fault tolerance of the angle (0 ≤ EPSILON < PI)
-     * @return              True if such an angle exists, False otherwise
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param epsilon     Fault tolerance of the angle (0 ≤ EPSILON < PI)
+     * @return True if such an angle exists, False otherwise
      */
-    public boolean LIC2(Point2D[] coordinates, double epsilon){
+    public boolean LIC2(Point2D[] coordinates, double epsilon) {
         assert epsilon >= 0;
         assert epsilon < Math.PI;
         int numPoints = coordinates.length;
@@ -111,14 +108,14 @@ public class EvaluateLIC {
             if (pt1.equals(pt2) || pt3.equals(pt2)) {
                 continue;
             }
-    
+
             // Create diectional vectors with point 2 as vertex
             double xVector1 = pt2.getX() - pt1.getX();
             double yVector1 = pt2.getY() - pt1.getY();
             double xVector2 = pt2.getX() - pt3.getX();
             double yVector2 = pt2.getY() - pt3.getY();
 
-            // Calculate the angle from the dot-product and and magnitude of the vectors
+            // Calculate the angle from the dot-product and magnitude of the vectors
             double dotProduct = (xVector1 * xVector2) + (yVector1 * yVector2);
             double magnitude1 = Math.sqrt(Math.pow(xVector1, 2) + Math.pow(yVector1, 2));
             double magnitude2 = Math.sqrt(Math.pow(xVector2, 2) + Math.pow(yVector2, 2));
@@ -152,33 +149,31 @@ public class EvaluateLIC {
             pt2 = coordinates[i + 1];
             pt3 = coordinates[i + 2];
 
-            if (0.5 * (Math.abs(pt1.getX() * pt2.getY() + pt2.getX() * pt3.getY() + pt3.getX() * pt1.getY() - pt1.getX() * pt3.getY() - pt2.getX() * pt1.getY() - pt3.getX() * pt2.getY())) > areaThreshold)
+            if (getTriangleArea(pt1, pt2, pt3) > areaThreshold)
                 return true;
-            
-            
         }
         return false;
     }
 
     /**
-     * Calculates if there is a cluster of consecutive datapoints that are in more than 
+     * Calculates if there is a cluster of consecutive datapoints that are in more than
      * quadrantThreshold different quadrants. If a datapoint is between two quadrants
      * then priority is given to quadrant with lower number.
-     * 
-     * @param coordinates       an array of the coordinates for the datapoints
-     * @param clusterSize       the size of the cluster of consecutive coordinates
-     * @param quadsThreshold    the number of quadrants to be exceed
-     * @return                  true if a cluster of coordinates are in more quadrants than quadsThreshold,
-     *                          otherwise false
+     *
+     * @param coordinates    an array of the coordinates for the datapoints
+     * @param clusterSize    the size of the cluster of consecutive coordinates
+     * @param quadsThreshold the number of quadrants to be exceed
+     * @return true if a cluster of coordinates are in more quadrants than quadsThreshold,
+     * otherwise false
      */
-    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsThreshold){
-        assert clusterSize >=2;
+    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsThreshold) {
+        assert clusterSize >= 2;
         assert coordinates.length >= clusterSize;
-        assert quadsThreshold >=1;
-        assert quadsThreshold <=3;
-        if(clusterSize<=quadsThreshold) return false;
+        assert quadsThreshold >= 1;
+        assert quadsThreshold <= 3;
+        if (clusterSize <= quadsThreshold) return false;
 
-        int[] quadrants = {0,0,0,0};
+        int[] quadrants = {0, 0, 0, 0};
         int sum = 0;
 
         // initialize window
@@ -186,55 +181,56 @@ public class EvaluateLIC {
             int add = getQuadrant(coordinates[i]);
             if (quadrants[add] == 0) sum += 1;
             quadrants[add] += 1;
-            if(sum>quadsThreshold) return true;
+            if (sum > quadsThreshold) return true;
         }
 
         // move window
-        for (int i = 0; i < coordinates.length- clusterSize; i++) {
+        for (int i = 0; i < coordinates.length - clusterSize; i++) {
             int remove = getQuadrant(coordinates[i]);
-            int add = getQuadrant(coordinates[i+clusterSize]);
+            int add = getQuadrant(coordinates[i + clusterSize]);
             if (quadrants[add] == 0) sum += 1;
             if (quadrants[remove] == 1) sum -= 1;
 
             quadrants[remove] -= 1;
             quadrants[add] += 1;
-            if(sum>quadsThreshold) return true;
+            if (sum > quadsThreshold) return true;
         }
         return false;
     }
 
     /**
      * Get the Quadrant 0-3 mainly used for LIC4
-     * @param coord     the datapoint
-     * @return          index of quadrant of datapoint, prioritizing lower index for datapoint on axis
+     *
+     * @param coord the datapoint
+     * @return index of quadrant of datapoint, prioritizing lower index for datapoint on axis
      */
     public static int getQuadrant(Point2D coord) {
-        if(coord.getX()>=0&&coord.getY()>=0){
+        if (coord.getX() >= 0 && coord.getY() >= 0) {
             return 0;
-        }else if(coord.getX()<0&&coord.getY()>=0){
+        } else if (coord.getX() < 0 && coord.getY() >= 0) {
             return 1;
-        }else if(coord.getX()<=0){
+        } else if (coord.getX() <= 0) {
             return 2;
-        }else{
+        } else {
             return 3;
         }
     }
-    
+
     /**
      * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]), 
      * such that X[j] - X[i] < 0. (where i = j-1)
      *
-     * @param coordinates   An array of the coordinates for the datapoints
-     * @return              True if such a set exists, False otherwise
+     * @param coordinates An array of the coordinates for the datapoints
+     * @return True if such a set exists, False otherwise
      */
-    public boolean LIC5(Point2D[] coordinates){
+    public boolean LIC5(Point2D[] coordinates) {
         int numPoints = coordinates.length;
-        for(int j = 1; j < numPoints; j++){
-            if(coordinates[j].getX() - coordinates[j-1].getX() < 0){
+        for (int j = 1; j < numPoints; j++) {
+            if (coordinates[j].getX() - coordinates[j - 1].getX() < 0) {
                 return true;
             }
         }
-       return false;
+        return false;
     }
 
     /**
@@ -295,27 +291,27 @@ public class EvaluateLIC {
 
 
     /**
-     * Calculates if there exists at least one set of two data points separated by exactly kPts consecutive 
-     * intervening points that are a distance greater than the length, lenght1, apart. 
-     * The conditionis not met when numPoints < 3.
+     * Calculates if there exists at least one set of two data points separated by exactly kPts consecutive
+     * intervening points that are a distance greater than the length, lenght1, apart.
+     * The conditions are not met when numPoints < 3.
      *
-     * @param coordinates   an array of the coordinates for the datapoints 
-     * @param kPts          Number of consecutive intervening datapoints sperating the points compared (1 ≤ kPts ≤ (numPoints - 2)
-     * @param lenght1       Length of minimum distance between the two separated points
-     * @return              True if such a point exists, False otherwise
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param kPts        Number of consecutive intervening datapoints sperating the points compared (1 ≤ kPts ≤ (numPoints - 2)
+     * @param length1     Length of minimum distance between the two separated points
+     * @return True if such a point exists, False otherwise
      */
-    public boolean LIC7(Point2D[] coordinates, int kPts, double length1){
+    public boolean LIC7(Point2D[] coordinates, int kPts, double length1) {
         int numPoints = coordinates.length;
-        if(numPoints < 3){
+        if (numPoints < 3) {
             return false;
         }
-        
+
         assert kPts >= 1;
         assert kPts <= numPoints - 2;
 
-        for(int i = 0; i < numPoints - kPts -1; i++){
-            double distance = coordinates[i].distance(coordinates[i+kPts+1]);
-            if(distance > length1){
+        for (int i = 0; i < numPoints - kPts - 1; i++) {
+            double distance = coordinates[i].distance(coordinates[i + kPts + 1]);
+            if (distance > length1) {
                 return true;
             }
         }
@@ -425,15 +421,15 @@ public class EvaluateLIC {
     }
 
     /**
-     * There exists at least one set of three data points separated by exactly E PTS and F PTS 
-     * consecutive intervening points, respectively, that are the vertices of a triangle with 
+     * There exists at least one set of three data points separated by exactly E PTS and F PTS
+     * consecutive intervening points, respectively, that are the vertices of a triangle with
      * area greater than AREA1. The condition is not met when NUMPOINTS < 5.
      *
      * @param coordinates an array of the coordinates for the datapoints
      * @param ePts        number of consecutive points between the first and second selected point, 1 ≤ E PTS, E PTS+F PTS ≤ NUMPOINTS−3
-     * @param fPts        represents the number of consecutive points between the second and third selected point, 1 ≤ F PTS, E PTS+F PTS ≤ NUMPOINTS−3     
+     * @param fPts        represents the number of consecutive points between the second and third selected point, 1 ≤ F PTS, E PTS+F PTS ≤ NUMPOINTS−3
      * @param area1       area used to compare with
-     * @return            If three data points can be found following the conditions
+     * @return If three data points can be found following the conditions
      */
     public boolean LIC10(Point2D[] coordinates, int ePts, int fPts, double area1) {
         assert coordinates != null;
@@ -450,50 +446,183 @@ public class EvaluateLIC {
             Point2D pt1 = coordinates[i]; //0
             Point2D pt2 = coordinates[i + ePts + 1]; // 3
             Point2D pt3 = coordinates[i + ePts + fPts + 2]; // 5
-            
-            // https://www.cuemath.com/geometry/area-of-triangle-in-coordinate-geometry/
-            double area = (0.5) * Math.abs(
-                                            pt1.getX() * (pt2.getY() - pt3.getY()) +
-                                            pt2.getX() * (pt3.getY() - pt1.getY()) + 
-                                            pt3.getX() * (pt1.getY() - pt2.getY()));
+
+            double area = getTriangleArea(pt1, pt2, pt3);
             // LIC condition
-            if( area > area1){
+            if (area > area1) {
                 return true;
             }
-
         }
         return false;
     }
 
     /**
-    * There exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
-    * exactly gPts consecutive intervening points, such that X[j] - X[i] < 0. (where i < j ) The
-    * condition is not met when NUMPOINTS < 3.
-    *
-    * @param coordinates   An array of the coordinates for the datapoints
-    * @param gPts          Number of point seperating the evaluated points
-    * @return              True if such a set exists, False otherwise
-    */
-   public boolean LIC11(Point2D[] coordinates, int gPts){
-       int numPoints = coordinates.length;
+     * There exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
+     * exactly gPts consecutive intervening points, such that X[j] - X[i] < 0. (where i < j ) The
+     * condition is not met when NUMPOINTS < 3.
+     *
+     * @param coordinates An array of the coordinates for the datapoints
+     * @param gPts        Number of point seperating the evaluated points
+     * @return True if such a set exists, False otherwise
+     */
+    public boolean LIC11(Point2D[] coordinates, int gPts) {
+        int numPoints = coordinates.length;
 
-       // Condition is not met when NUMPOINTS < 3
-       if(numPoints < 3){
-           return false;
-       }        
-       // Validating input
-       // This must be done after numPoints is checked due to edge Case, if numPoints = 3 then gPts = 2 is invalid, 
-       // rather than an assertion error. 
-       assert gPts >= 1;
-       assert gPts <= numPoints - 2;
+        // Condition is not met when NUMPOINTS < 3
+        if (numPoints < 3) {
+            return false;
+        }
+        // Validating input
+        // This must be done after numPoints is checked due to edge Case, if numPoints = 3 then gPts = 2 is invalid,
+        // rather than an assertion error.
+        assert gPts >= 1;
+        assert gPts <= numPoints - 2;
 
 
-       for(int i = 0; i < numPoints - gPts - 1; i++){
-           // LIC condition
-           if(coordinates[i + gPts + 1].getX() - coordinates[i].getX() < 0){
-               return true;
-           }
-       }
-      return false;
-   }
+        for (int i = 0; i < numPoints - gPts - 1; i++) {
+            // LIC condition
+            if (coordinates[i + gPts + 1].getX() - coordinates[i].getX() < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Calculates if here exists at least one set of three data points, separated by exactly aPts and bPts
+     * consecutive intervening points, respectively, that cannot be contained within or on a circle of
+     * radius RADIUS1. In addition, there exists at least one set of three data points (which can be
+     * the same or different from the three data points just mentioned) separated by exactly A PTS
+     * and B PTS consecutive intervening points, respectively, that can be contained in or on a
+     * circle of radius RADIUS2. 
+     * 
+     * @param coordinates   an array of the coordinates for the datapoints
+     * @param aPts          left offset of the center vertex in coordinates
+     * @param bPts          right offset of the center vertex in coordinates
+     * @param radius1       the radius of the circle that cannot contain the three points
+     * @param radius2       the radius of the circle that can contain the three points
+     * @return              true if three points separated by aPts and bPts cannot be contained in circle with radius1 and three points 
+     *                      separated by aPts and bPts can be contained in circle with radius2, otherwise false
+     * 
+     */
+    public boolean LIC13(Point2D[] coordinates, int aPts, int bPts, double radius1, double radius2){
+        assert radius2 >=0;
+        if(coordinates.length<5) return false;
+
+        boolean condition1 = false;
+        boolean condition2 = false;
+
+        
+        for(int i = aPts + 1; i < coordinates.length - bPts - 1;i++){
+            Point2D pt1 = coordinates[i-aPts-1];
+            Point2D pt2 = coordinates[i];
+            Point2D pt3 = coordinates[i+bPts+1];
+            
+            // get distances between points
+            double a = pt1.distance(pt2);
+            double b = pt2.distance(pt3);
+            double c = pt3.distance(pt1);
+            
+            Point2D[] points = new Point2D[3];
+
+            // check for greatest distance
+            if(a>=b&&a>=c){
+                points[0] = pt1;
+                points[1] = pt2;
+                points[2] = pt3;
+            }else if(b>=a&&b>=c){
+                points[0] = pt2;
+                points[1] = pt3;
+                points[2] = pt1;
+            }else if(c>=a&&c>=b){
+                points[0] = pt1;
+                points[1] = pt3;
+                points[2] = pt2;
+            }
+
+            // calculate midpoint between the two points that are furthest apart
+            Point2D mid = new Point2D.Double(0.5*(points[0].getX()+points[1].getX()), 0.5*(points[0].getY()+points[1].getY()));
+            double minRadiusA = points[0].distance(mid);
+
+            // check if third point is within the cicle spanning between the other two
+            if(mid.distance(points[2])<=minRadiusA){
+                if(minRadiusA>radius1){
+                    condition1 = true;
+                }
+                if(minRadiusA<=radius2){
+                    condition2 = true;
+                }
+            }
+            if(condition1&&condition2) return true;
+
+            // calculate triangle area between points
+            double k = getTriangleArea(pt1, pt2, pt3);
+
+            // calculate area of circle with all points on its edge
+            double minRadiusB = (a*b*c)/(4*k);
+
+            if(minRadiusB>radius1){
+                condition1 = true;
+            } 
+            if(minRadiusB<=radius2){
+                condition2 = true;
+            }
+        }
+        return condition1 && condition2;
+    }
+
+    /**
+     * Gets the area of the triangle created by the 3 points
+     *
+     * @param pt1 Point 1
+     * @param pt2 Point 2
+     * @param pt3 Point 3
+     * @return The area
+     */
+    public static double getTriangleArea(Point2D pt1, Point2D pt2, Point2D pt3) {
+        // https://www.cuemath.com/geometry/area-of-triangle-in-coordinate-geometry/
+        return (0.5) * Math.abs(
+                pt1.getX() * (pt2.getY() - pt3.getY()) +
+                        pt2.getX() * (pt3.getY() - pt1.getY()) +
+                        pt3.getX() * (pt1.getY() - pt2.getY()));
+    }
+
+    /**
+     * There exists at least one set of three data points, separated by exactly E PTS and F PTS con-
+     * secutive intervening points, respectively, that are the vertices of a triangle with area greater
+     * than AREA1. In addition, there exist three data points (which can be the same or different
+     * from the three data points just mentioned) separated by exactly E PTS and F PTS consec-
+     * utive intervening points, respectively, that are the vertices of a triangle with area less than
+     * AREA2. Both parts must be true for the LIC to be true. The condition is not met when
+     * NUMPOINTS < 5.
+     *
+     * @param coordinates An array of the coordinates for the datapoints
+     * @param ePts Left offset of the center vertex in coordinates
+     * @param fPts Right offset of the center vertex in coordinates
+     * @param area1 The area that a triangle should be greater than
+     * @param area2 The area that a triangle should be less than
+     * @return If there is one triangle that can be formed that has and area greater than area1 and one less than area2
+     * from coordinates separated by ePts and fPts
+     */
+    public boolean LIC14(Point2D[] coordinates, int ePts, int fPts, double area1, double area2) {
+        assert coordinates != null;
+        assert 0 <= area2;
+
+        int numPoints = coordinates.length;
+        if (numPoints < 5) {
+            return false;
+        }
+
+        boolean greater = false;
+        boolean less = false;
+        for (int i = 0; i < numPoints - ePts - fPts - 2; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + ePts + 1];
+            Point2D pt3 = coordinates[i + ePts + fPts + 2];
+            double area = getTriangleArea(pt1, pt2, pt3);
+            greater |= area > area1;
+            less |= area < area2;
+        }
+        return greater && less;
+    }
 }
