@@ -220,6 +220,29 @@ public class EvaluateLICTest {
 
     // ---------------------------------------------------- LIC3 ----------------------------------------------------
     @Test
+    public void testExceptLIC3() {
+        //Case where input is invalid
+        
+        try {
+            // coordinates is null
+            EvaluateLIC.LIC3(null, 10);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        Point2D[] coordinates = new Point2D.Double[2];
+        Arrays.fill(coordinates, new Point2D.Double(0, 0));
+
+        try {
+            // area is less than 0
+            EvaluateLIC.LIC3(coordinates, -1);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+        
+    }
+
+    @Test
     public void testLIC3Positive() {
         //Case where a valid input is given
         Point2D[] coordinates = new Point2D.Double[10];
