@@ -51,9 +51,11 @@ public class Main {
         }
 
         // Compute Final Launch Decision
+        globals.launchDecision = true;
         for (int i = 0; i < globals.fuv.length; i++) {
-            if (globals.fuv[i]) {
-                globals.launchDecision = true;
+            if (!globals.fuv[i]) {
+                globals.launchDecision = false;
+                break;
             }
         }
          
