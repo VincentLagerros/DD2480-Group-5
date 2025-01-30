@@ -9,10 +9,9 @@ public class EvaluateLIC {
      * a distance greater than the length, LENGTH1, apart.
      *
      * @param coordinates a Point2D array of the x- and y-coordinates for the datapoints
-     * @param length1 length to check against
-     * @return true if there exists two consecutive datapoints where the Euclidean 
-     *         distance dist > length1 otherwise false
-     *
+     * @param length1     length to check against
+     * @return true if there exists two consecutive datapoints where the Euclidean
+     * distance dist > length1 otherwise false
      */
     public static boolean LIC0(Point2D[] coordinates, double length1) {
         assert coordinates != null;
@@ -31,13 +30,14 @@ public class EvaluateLIC {
             }
         }
         return false;
-    }    
+    }
 
     /**
-     * There exists at least one set of three consecutive data points that 
+     * There exists at least one set of three consecutive data points that
      * cannot all be contained within or on a circle of radius RADIUS1.
+     *
      * @param coordinates a Point2D array of the x- and y-coordinates for the datapoints
-     * @param radius1 radius to check against
+     * @param radius1     radius to check against
      * @return true if the circumradius is larger than radius1, otherwise return false
      */
     public static boolean LIC1(Point2D[] coordinates, double radius1) {
@@ -69,7 +69,7 @@ public class EvaluateLIC {
                 if (largestDistance > radius1 * 2) {
                     return true; // The points cannot be contained in the circle
                 }
-                
+
                 continue;
             }
 
@@ -92,7 +92,7 @@ public class EvaluateLIC {
      * @param epsilon     Fault tolerance of the angle (0 ≤ EPSILON < PI)
      * @return True if such an angle exists, False otherwise
      */
-    public boolean LIC2(Point2D[] coordinates, double epsilon) {
+    public static boolean LIC2(Point2D[] coordinates, double epsilon) {
         assert epsilon >= 0;
         assert epsilon < Math.PI;
         int numPoints = coordinates.length;
@@ -137,7 +137,7 @@ public class EvaluateLIC {
      * @param areaThreshold the area which the triangle must exceed
      * @return true if the three datapoints exist, otherwise false
      */
-    public boolean LIC3(Point2D[] coordinates, double areaThreshold) {
+    public static boolean LIC3(Point2D[] coordinates, double areaThreshold) {
         assert coordinates != null;
         assert 0 <= areaThreshold;
 
@@ -166,7 +166,7 @@ public class EvaluateLIC {
      * @return true if a cluster of coordinates are in more quadrants than quadsThreshold,
      * otherwise false
      */
-    public boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsThreshold) {
+    public static boolean LIC4(Point2D[] coordinates, int clusterSize, int quadsThreshold) {
         assert clusterSize >= 2;
         assert coordinates.length >= clusterSize;
         assert quadsThreshold >= 1;
@@ -217,13 +217,13 @@ public class EvaluateLIC {
     }
 
     /**
-     * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]), 
+     * Calculates if there exists at least one set of two consecutive data points, (X[i],Y[i]) and (X[j],Y[j]),
      * such that X[j] - X[i] < 0. (where i = j-1)
      *
      * @param coordinates An array of the coordinates for the datapoints
      * @return True if such a set exists, False otherwise
      */
-    public boolean LIC5(Point2D[] coordinates) {
+    public static boolean LIC5(Point2D[] coordinates) {
         int numPoints = coordinates.length;
         for (int j = 1; j < numPoints; j++) {
             if (coordinates[j].getX() - coordinates[j - 1].getX() < 0) {
@@ -245,7 +245,7 @@ public class EvaluateLIC {
      * @param dist        distance computed to (0 ≤ DIST)
      * @return True if such a point exists, False otherwise
      */
-    public boolean LIC6(Point2D[] coordinates, int nPts, double dist) {
+    public static boolean LIC6(Point2D[] coordinates, int nPts, double dist) {
         assert coordinates != null;
         assert 0 <= dist;
         assert 3 <= nPts;
@@ -300,7 +300,7 @@ public class EvaluateLIC {
      * @param length1     Length of minimum distance between the two separated points
      * @return True if such a point exists, False otherwise
      */
-    public boolean LIC7(Point2D[] coordinates, int kPts, double length1) {
+    public static boolean LIC7(Point2D[] coordinates, int kPts, double length1) {
         int numPoints = coordinates.length;
         if (numPoints < 3) {
             return false;
@@ -322,23 +322,24 @@ public class EvaluateLIC {
      * Calculates if there exists at least one set of three data points separated by exactly A_PTS and B_PTS
      * consecutive intervening points, respectively, that cannot be contained within or on a circle of radius
      * RADIUS1. The condition is not met when NUMPOINTS < 5.
-     * @param coordinates
-     * @param aPts
-     * @param bPts
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param aPts        Number of consecutive intervening datapoints sperating the points to the left
+     * @param bPts        Number of consecutive intervening datapoints sperating the points to the right
      * @return True if such points exist
      */
-    public boolean LIC8(Point2D[] coordinates, int aPts, int bPts, double radius) {
+    public static boolean LIC8(Point2D[] coordinates, int aPts, int bPts, double radius) {
         assert coordinates != null;
         int numPoints = coordinates.length;
-        
+
         if (numPoints < 5) {
             return false;
         }
 
         assert aPts >= 1;
         assert bPts >= 1;
-        assert aPts + bPts <= numPoints -3;
-        
+        assert aPts + bPts <= numPoints - 3;
+
         for (int i = 0; i + aPts + bPts + 2 < numPoints; i++) {
             Point2D pt1 = coordinates[i];
             Point2D pt2 = coordinates[i + aPts + 1];
@@ -359,16 +360,16 @@ public class EvaluateLIC {
                 if (largestDistance > radius * 2) {
                     return true; // The points cannot be contained in the circle
                 }
-                
+
                 continue;
             }
             //Coordinates for circumcenter
             double ux = ((ax * ax + ay * ay) * (by - cy) +
-                (bx * bx + by * by) * (cy - ay) +
-                (cx * cx + cy * cy) * (ay - by)) / d;
+                    (bx * bx + by * by) * (cy - ay) +
+                    (cx * cx + cy * cy) * (ay - by)) / d;
             double uy = ((ax * ax + ay * ay) * (cx - bx) +
-                (bx * bx + by * by) * (ax - cx) +
-                (cx * cx + cy * cy) * (bx - ax)) / d;
+                    (bx * bx + by * by) * (ax - cx) +
+                    (cx * cx + cy * cy) * (bx - ax)) / d;
 
             double circumradius = pt1.distance(ux, uy); // Circumradius is distance from circumcenter to any point
             if (circumradius > radius) {
@@ -391,7 +392,7 @@ public class EvaluateLIC {
      * @param epsilon     How far away in radians from PI (180 deg) these three points can be to not form a straight line
      * @return If three data points can be found following the conditions
      */
-    public boolean LIC9(Point2D[] coordinates, int cPts, int dPts, double epsilon) {
+    public static boolean LIC9(Point2D[] coordinates, int cPts, int dPts, double epsilon) {
         assert coordinates != null;
         int numPoints = coordinates.length;
         assert cPts >= 1;
@@ -434,7 +435,7 @@ public class EvaluateLIC {
      * @param area1       area used to compare with
      * @return If three data points can be found following the conditions
      */
-    public boolean LIC10(Point2D[] coordinates, int ePts, int fPts, double area1) {
+    public static boolean LIC10(Point2D[] coordinates, int ePts, int fPts, double area1) {
         assert coordinates != null;
         int numPoints = coordinates.length;
         if (numPoints < 5) {
@@ -468,7 +469,7 @@ public class EvaluateLIC {
      * @param gPts        Number of point seperating the evaluated points
      * @return True if such a set exists, False otherwise
      */
-    public boolean LIC11(Point2D[] coordinates, int gPts) {
+    public static boolean LIC11(Point2D[] coordinates, int gPts) {
         int numPoints = coordinates.length;
 
         // Condition is not met when NUMPOINTS < 3
@@ -490,23 +491,22 @@ public class EvaluateLIC {
         }
         return false;
     }
-  
-   /**
+
+    /**
      * There exists at least one set of two data points, separated by exactly K PTS consecutive
-     * intervening points, which are a distance greater than the length, LENGTH1, apart. In addition, 
+     * intervening points, which are a distance greater than the length, LENGTH1, apart. In addition,
      * there exists at least one set of two data points (which can be the same or different from
      * the two data points just mentioned), separated by exactly K PTS consecutive intervening
-     * points, that are a distance less than the length, LENGTH2, apart. Both parts must be true 
+     * points, that are a distance less than the length, LENGTH2, apart. Both parts must be true
      * for the LIC to be true. The condition is not met when coordinates.length < 3.
      *
      * @param coordinates an array of the coordinates for the datapoints
      * @param kPts        number of consecutive intervening points
      * @param length2     length used to compare the distance of the points, 0 ≤ LENGTH2
-
      * @return If three data points can be found following the conditions
      */
-    public boolean LIC12(Point2D[] coordinates, int kPts, double length2) {
-        if(coordinates.length < 3){
+    public static boolean LIC12(Point2D[] coordinates, int kPts, double length1, double length2) {
+        if (coordinates.length < 3) {
             return false;
         }
         assert length2 >= 0;
@@ -516,24 +516,16 @@ public class EvaluateLIC {
         boolean greater = false;
         boolean smaller = false;
 
-        for(int i = 0; i < coordinates.length - kPts - 1; i++){
-            Point2D pt1 = coordinates[i]; 
-            Point2D pt2 = coordinates[i + kPts + 1]; 
+        for (int i = 0; i < coordinates.length - kPts - 1; i++) {
+            Point2D pt1 = coordinates[i];
+            Point2D pt2 = coordinates[i + kPts + 1];
 
             double distance = pt1.distance(pt2);
-            if(distance > length2){
-                greater = true;
-            }
-            if(distance < length2){
-                smaller = true;
-            }
+            greater |= distance > length1;
+            smaller |= distance < length2;
         }
 
-        if(greater && smaller){
-            return true;
-        } else{
-            return false;
-        }
+        return greater && smaller;
     }
 
     /**
@@ -542,77 +534,76 @@ public class EvaluateLIC {
      * radius RADIUS1. In addition, there exists at least one set of three data points (which can be
      * the same or different from the three data points just mentioned) separated by exactly A PTS
      * and B PTS consecutive intervening points, respectively, that can be contained in or on a
-     * circle of radius RADIUS2. 
-     * 
-     * @param coordinates   an array of the coordinates for the datapoints
-     * @param aPts          left offset of the center vertex in coordinates
-     * @param bPts          right offset of the center vertex in coordinates
-     * @param radius1       the radius of the circle that cannot contain the three points
-     * @param radius2       the radius of the circle that can contain the three points
-     * @return              true if three points separated by aPts and bPts cannot be contained in circle with radius1 and three points 
-     *                      separated by aPts and bPts can be contained in circle with radius2, otherwise false
-     * 
+     * circle of radius RADIUS2.
+     *
+     * @param coordinates an array of the coordinates for the datapoints
+     * @param aPts        left offset of the center vertex in coordinates
+     * @param bPts        right offset of the center vertex in coordinates
+     * @param radius1     the radius of the circle that cannot contain the three points
+     * @param radius2     the radius of the circle that can contain the three points
+     * @return true if three points separated by aPts and bPts cannot be contained in circle with radius1 and three points
+     * separated by aPts and bPts can be contained in circle with radius2, otherwise false
      */
-    public boolean LIC13(Point2D[] coordinates, int aPts, int bPts, double radius1, double radius2){
-        assert radius2 >=0;
-        if(coordinates.length<5) return false;
+    public static boolean LIC13(Point2D[] coordinates, int aPts, int bPts, double radius1, double radius2) {
+        assert radius2 >= 0;
+        if (coordinates.length < 5) return false;
 
         boolean condition1 = false;
         boolean condition2 = false;
 
-        
-        for(int i = aPts + 1; i < coordinates.length - bPts - 1;i++){
-            Point2D pt1 = coordinates[i-aPts-1];
+
+        for (int i = aPts + 1; i < coordinates.length - bPts - 1; i++) {
+            Point2D pt1 = coordinates[i - aPts - 1];
             Point2D pt2 = coordinates[i];
-            Point2D pt3 = coordinates[i+bPts+1];
-            
+            Point2D pt3 = coordinates[i + bPts + 1];
+
             // get distances between points
             double a = pt1.distance(pt2);
             double b = pt2.distance(pt3);
             double c = pt3.distance(pt1);
-            
+
             Point2D[] points = new Point2D[3];
 
             // check for greatest distance
-            if(a>=b&&a>=c){
+            if (a >= b && a >= c) {
                 points[0] = pt1;
                 points[1] = pt2;
                 points[2] = pt3;
-            }else if(b>=a&&b>=c){
+            } else if (b >= a && b >= c) {
                 points[0] = pt2;
                 points[1] = pt3;
                 points[2] = pt1;
-            }else if(c>=a&&c>=b){
+            } else {
                 points[0] = pt1;
                 points[1] = pt3;
                 points[2] = pt2;
             }
 
             // calculate midpoint between the two points that are furthest apart
-            Point2D mid = new Point2D.Double(0.5*(points[0].getX()+points[1].getX()), 0.5*(points[0].getY()+points[1].getY()));
+            Point2D mid = new Point2D.Double(0.5 * (points[0].getX() + points[1].getX()), 0.5 * (points[0].getY() + points[1].getY()));
             double minRadiusA = points[0].distance(mid);
 
             // check if third point is within the cicle spanning between the other two
-            if(mid.distance(points[2])<=minRadiusA){
-                if(minRadiusA>radius1){
+            if (mid.distance(points[2]) <= minRadiusA) {
+                if (minRadiusA > radius1) {
                     condition1 = true;
                 }
-                if(minRadiusA<=radius2){
+                if (minRadiusA <= radius2) {
                     condition2 = true;
                 }
             }
-            if(condition1&&condition2) return true;
+            if (condition1 && condition2) return true;
 
             // calculate triangle area between points
             double k = getTriangleArea(pt1, pt2, pt3);
 
             // calculate area of circle with all points on its edge
-            double minRadiusB = (a*b*c)/(4*k);
+            double minRadiusB = (a * b * c) / (4 * k);
 
-            if(minRadiusB>radius1){
+            if (minRadiusB > radius1) {
                 condition1 = true;
-            } 
-            if(minRadiusB<=radius2){
+            }
+            if (minRadiusB <= radius2) {
                 condition2 = true;
             }
         }
@@ -645,14 +636,14 @@ public class EvaluateLIC {
      * NUMPOINTS < 5.
      *
      * @param coordinates An array of the coordinates for the datapoints
-     * @param ePts Left offset of the center vertex in coordinates
-     * @param fPts Right offset of the center vertex in coordinates
-     * @param area1 The area that a triangle should be greater than
-     * @param area2 The area that a triangle should be less than
+     * @param ePts        Left offset of the center vertex in coordinates
+     * @param fPts        Right offset of the center vertex in coordinates
+     * @param area1       The area that a triangle should be greater than
+     * @param area2       The area that a triangle should be less than
      * @return If there is one triangle that can be formed that has and area greater than area1 and one less than area2
      * from coordinates separated by ePts and fPts
      */
-    public boolean LIC14(Point2D[] coordinates, int ePts, int fPts, double area1, double area2) {
+    public static boolean LIC14(Point2D[] coordinates, int ePts, int fPts, double area1, double area2) {
         assert coordinates != null;
         assert 0 <= area2;
 

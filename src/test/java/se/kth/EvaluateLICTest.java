@@ -7,6 +7,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 // Class for all unit tests relating to LIC evaluation
@@ -78,7 +79,7 @@ public class EvaluateLICTest {
         assertTrue(EvaluateLIC.LIC0(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.LENGTH1));
     }
 
-  // ---------------------------------------------------- LIC1 ----------------------------------------------------
+    // ---------------------------------------------------- LIC1 ----------------------------------------------------
 
     @Test
     public void testLIC1TrueForTriangleOutsideRadius() {
@@ -136,7 +137,7 @@ public class EvaluateLICTest {
     }
 
     @Test
-    public void testLIC1TrueForPointsOnSingleLineButStillOutsideOfCircle(){
+    public void testLIC1TrueForPointsOnSingleLineButStillOutsideOfCircle() {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
         globals.xCoordinates = new double[]{0, 0, 0};
         globals.yCoordinates = new double[]{0, 100000, 200000};
@@ -146,11 +147,10 @@ public class EvaluateLICTest {
         assertTrue(EvaluateLIC.LIC1(convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates), globals.parameters.RADIUS1));
     }
 
-   // ---------------------------------------------------- LIC2 ----------------------------------------------------
-   @Test
-   public void testLIC2Positive(){
-       EvaluateLIC eval = new EvaluateLIC();
-       Point2D[] coordinates = new Point2D.Double[4];
+    // ---------------------------------------------------- LIC2 ----------------------------------------------------
+    @Test
+    public void testLIC2Positive() {
+        Point2D[] coordinates = new Point2D.Double[4];
 
         coordinates[0] = new Point2D.Double(0, 0.1);
         coordinates[1] = new Point2D.Double(0, 0);
@@ -159,12 +159,11 @@ public class EvaluateLICTest {
 
         double epsilon = 0.1;
 
-        assertTrue(eval.LIC2(coordinates, epsilon));
+        assertTrue(EvaluateLIC.LIC2(coordinates, epsilon));
     }
 
     @Test
     public void testLIC2Negative() {
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[5];
 
         coordinates[0] = new Point2D.Double(0, 1);
@@ -175,12 +174,11 @@ public class EvaluateLICTest {
 
         double epsilon = 2.0;
 
-        assertFalse(eval.LIC2(coordinates, epsilon));
+        assertFalse(EvaluateLIC.LIC2(coordinates, epsilon));
     }
 
     @Test
     public void testLIC2Epsilon() {
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[3];
 
         coordinates[0] = new Point2D.Double(0, 1);
@@ -190,12 +188,11 @@ public class EvaluateLICTest {
         double epsilon1 = 1.0;
         double epsilon2 = 3.0;
 
-        assertNotEquals(eval.LIC2(coordinates, epsilon1), eval.LIC2(coordinates, epsilon2));
+        assertNotEquals(EvaluateLIC.LIC2(coordinates, epsilon1), EvaluateLIC.LIC2(coordinates, epsilon2));
     }
 
     @Test
     public void testExceptLIC2() {
-        EvaluateLIC eval = new EvaluateLIC();
         // 2 tests for bad inputs, epsilon < 0, epsilon < Math.PI
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
@@ -208,14 +205,14 @@ public class EvaluateLICTest {
 
         // epsilon < 0
         try {
-            eval.LIC2(coordinates, epsilon1);
+            EvaluateLIC.LIC2(coordinates, epsilon1);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // epsilon > Math.PI 
         try {
-            eval.LIC2(coordinates, epsilon2);
+            EvaluateLIC.LIC2(coordinates, epsilon2);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
@@ -225,7 +222,6 @@ public class EvaluateLICTest {
     @Test
     public void testLIC3Positive() {
         //Case where a valid input is given
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[10];
         Arrays.fill(coordinates, new Point2D.Double(0, 0));
 
@@ -233,25 +229,23 @@ public class EvaluateLICTest {
         coordinates[8] = new Point2D.Double(-5, 5);
         double area = 0.5;
 
-        assertTrue(m.LIC3(coordinates, area));
+        assertTrue(EvaluateLIC.LIC3(coordinates, area));
     }
 
     @Test
     public void testLIC3NegativeForNoTriangle() {
         //Case where no points create a triangle with area>0
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[10];
         Arrays.fill(coordinates, new Point2D.Double(0, 0));
         coordinates[9] = new Point2D.Double(5, 5);
         double area = 0.5;
 
-        assertFalse(m.LIC3(coordinates, area));
+        assertFalse(EvaluateLIC.LIC3(coordinates, area));
     }
 
     @Test
     public void testLIC3NegativeForLargeAreaThreshold() {
         //Case where area threshold is larger than the triangle created by the points
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[10];
         Arrays.fill(coordinates, new Point2D.Double(0, 0));
 
@@ -259,26 +253,25 @@ public class EvaluateLICTest {
         coordinates[8] = new Point2D.Double(-5, 5);
         double area = 50;
 
-        assertFalse(m.LIC3(coordinates, area));
+        assertFalse(EvaluateLIC.LIC3(coordinates, area));
     }
 
 
     //Test for LIC4
     @Test
     public void testExeptLIC4() {
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
 
         // clusterSize is to small
         try {
-            eval.LIC4(coordinates, 1, 2);
+            EvaluateLIC.LIC4(coordinates, 1, 2);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // quadsThreshold is too large
         try {
-            eval.LIC4(coordinates, 2, 4);
+            EvaluateLIC.LIC4(coordinates, 2, 4);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
@@ -288,7 +281,6 @@ public class EvaluateLICTest {
     @Test
     public void testLIC4Positive() {
         //Case where at least one cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
 
         coordinates[0] = new Point2D.Double(0, 0);
@@ -296,15 +288,14 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 1);
         coordinates[3] = new Point2D.Double(3, -2);
 
-        assertTrue(eval.LIC4(coordinates, 3, 2));
-        assertTrue(eval.LIC4(coordinates, 2, 1));
-        assertTrue(eval.LIC4(coordinates, 4, 2));
+        assertTrue(EvaluateLIC.LIC4(coordinates, 3, 2));
+        assertTrue(EvaluateLIC.LIC4(coordinates, 2, 1));
+        assertTrue(EvaluateLIC.LIC4(coordinates, 4, 2));
     }
 
     @Test
     public void testLIC4Negative() {
         //Case where no cluster of consecutive datapoints lie in more than quadrantThreshold quadrants
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
 
         coordinates[0] = new Point2D.Double(0, 0);
@@ -312,15 +303,14 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(-2, -1);
         coordinates[3] = new Point2D.Double(-3, -2);
 
-        assertFalse(eval.LIC4(coordinates, 3, 2));
-        assertFalse(eval.LIC4(coordinates, 4, 2));
-        assertFalse(eval.LIC4(coordinates, 4, 3));
+        assertFalse(EvaluateLIC.LIC4(coordinates, 3, 2));
+        assertFalse(EvaluateLIC.LIC4(coordinates, 4, 2));
+        assertFalse(EvaluateLIC.LIC4(coordinates, 4, 3));
     }
 
     @Test
     public void testLIC4AxisCoordinates() {
         //Case where coordinates lie on an axis between two quadrants
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
 
         coordinates[0] = new Point2D.Double(0, 0);
@@ -328,28 +318,26 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(-2, 0);
         coordinates[3] = new Point2D.Double(0, -2);
 
-        assertTrue(eval.LIC4(coordinates, 2, 1));
-        assertFalse(eval.LIC4(coordinates, 4, 3));
-        assertTrue(eval.LIC4(coordinates, 3, 2));
+        assertTrue(EvaluateLIC.LIC4(coordinates, 2, 1));
+        assertFalse(EvaluateLIC.LIC4(coordinates, 4, 3));
+        assertTrue(EvaluateLIC.LIC4(coordinates, 3, 2));
     }
 
     // Tests for LIC5
     @Test
     public void testLIC5Positive() {
         // Case with points so that X[j] < X[i], i = j - 1 
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[3];
         coordinates[0] = new Point2D.Double(1, 0);
         coordinates[1] = new Point2D.Double(2, 0);
         coordinates[2] = new Point2D.Double(1.5, 0);
 
-        assertTrue(m.LIC5(coordinates));
+        assertTrue(EvaluateLIC.LIC5(coordinates));
     }
 
     @Test
     public void testLIC5PositiveLast() {
         // Case with points so that X[j] < X[i], i = j - 1 occurs at the final position in the array
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[6];
         coordinates[0] = new Point2D.Double(1, 0);
         coordinates[1] = new Point2D.Double(2, 0);
@@ -358,36 +346,33 @@ public class EvaluateLICTest {
         coordinates[4] = new Point2D.Double(5, 0);
         coordinates[5] = new Point2D.Double(1, 0);
 
-        assertTrue(m.LIC5(coordinates));
+        assertTrue(EvaluateLIC.LIC5(coordinates));
     }
 
     @Test
     public void testLIC5Negative() {
         // Case with no points so that X[j] < X[i], i = j - 1 
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[3];
         coordinates[0] = new Point2D.Double(1, 0);
         coordinates[1] = new Point2D.Double(2, 0);
         coordinates[2] = new Point2D.Double(3, 0);
 
-        assertFalse(m.LIC5(coordinates));
+        assertFalse(EvaluateLIC.LIC5(coordinates));
     }
 
     @Test
     public void testLIC5NegativeShort() {
         // Negative case with single point
-        EvaluateLIC m = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[1];
         coordinates[0] = new Point2D.Double(1, 0);
 
-        assertFalse(m.LIC5(coordinates));
+        assertFalse(EvaluateLIC.LIC5(coordinates));
     }
 
     // ---------------------------------------------------- LIC6 ----------------------------------------------------
     @Test
     public void testLIC6Positive() {
         // Case where at least one point lies farther than dist from the line
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
 
         coordinates[0] = new Point2D.Double(0, 0);
@@ -398,13 +383,12 @@ public class EvaluateLICTest {
         int nPts = 3;
         double dist = 1.5;
 
-        assertTrue(eval.LIC6(coordinates, nPts, dist));
+        assertTrue(EvaluateLIC.LIC6(coordinates, nPts, dist));
     }
 
     @Test
     public void testLIC6PositiveIdentical() {
         // Case where at least one point lies farther than dist from the first point and the first and last points in the group are identical
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[3];
 
         coordinates[0] = new Point2D.Double(0, 0);
@@ -414,13 +398,12 @@ public class EvaluateLICTest {
         int nPts = 3;
         double dist = 0.5;
 
-        assertTrue(eval.LIC6(coordinates, nPts, dist));
+        assertTrue(EvaluateLIC.LIC6(coordinates, nPts, dist));
     }
 
     @Test
     public void testLIC6Neagtive() {
         // Case where all points lie within dist from the line
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
 
         coordinates[0] = new Point2D.Double(0, 0);
@@ -431,13 +414,12 @@ public class EvaluateLICTest {
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(coordinates, nPts, dist));
+        assertFalse(EvaluateLIC.LIC6(coordinates, nPts, dist));
     }
 
     @Test
     public void testLIC6NegativeShort() {
         // Case where numPoints < 3
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
         Arrays.fill(coordinates, new Point2D.Double(0, 0));
 
@@ -447,13 +429,12 @@ public class EvaluateLICTest {
         int nPts = 3;
         double dist = 1.5;
 
-        assertFalse(eval.LIC6(coordinates, nPts, dist));
+        assertFalse(EvaluateLIC.LIC6(coordinates, nPts, dist));
     }
 
     @Test
     public void testLIC6NegativeEdge() {
         // Case where numPoints = 3 and nPts=3
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[3];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(0, 0);
@@ -462,13 +443,12 @@ public class EvaluateLICTest {
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(coordinates, nPts, dist));
+        assertFalse(EvaluateLIC.LIC6(coordinates, nPts, dist));
     }
 
     @Test
     public void testLIC6NegativeLine() {
         // Case where all points are on the same line
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 1);
@@ -478,12 +458,11 @@ public class EvaluateLICTest {
         int nPts = 3;
         double dist = 0.01;
 
-        assertFalse(eval.LIC6(coordinates, nPts, dist));
+        assertFalse(EvaluateLIC.LIC6(coordinates, nPts, dist));
     }
 
     @Test
     public void testExceptLIC6() {
-        EvaluateLIC eval = new EvaluateLIC();
         // 3 tests for bad inputs, 0 > dist, nPts < 3, nPts > numPoints
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
@@ -501,21 +480,21 @@ public class EvaluateLICTest {
 
         // 0 > dist
         try {
-            eval.LIC6(coordinates, nPts1, dist1);
+            EvaluateLIC.LIC6(coordinates, nPts1, dist1);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // nPts < 3
         try {
-            eval.LIC6(coordinates, nPts2, dist2);
+            EvaluateLIC.LIC6(coordinates, nPts2, dist2);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // nPts > numPoints
         try {
-            eval.LIC6(coordinates, nPts3, dist2);
+            EvaluateLIC.LIC6(coordinates, nPts3, dist2);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
@@ -525,8 +504,6 @@ public class EvaluateLICTest {
     @Test
     public void testLIC7Positive() {
         // Case with a set of points kPts apart are further away than length1 exists
-        EvaluateLIC eval = new EvaluateLIC();
-
         Point2D[] coordinates = new Point2D.Double[5];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 0);
@@ -537,13 +514,12 @@ public class EvaluateLICTest {
         int kPts = 2;
         double length1 = 2;
 
-        assertTrue(eval.LIC7(coordinates, kPts, length1));
+        assertTrue(EvaluateLIC.LIC7(coordinates, kPts, length1));
     }
 
     @Test
     public void testLIC7PositiveMin() {
         // Minimal possible input
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(1, 0),
@@ -551,13 +527,12 @@ public class EvaluateLICTest {
         };
         int kPts = 1;
         double length1 = 2.0;
-        assertTrue(eval.LIC7(coordinates, kPts, length1));
+        assertTrue(EvaluateLIC.LIC7(coordinates, kPts, length1));
     }
 
     @Test
     public void testLIC7Negative() {
         // Case where at a set of points kPts apart are further away than length1 does not exist
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[5];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 0);
@@ -568,14 +543,12 @@ public class EvaluateLICTest {
         int kPts = 2;
         double length1 = 4;
 
-        assertFalse(eval.LIC7(coordinates, kPts, length1));
+        assertFalse(EvaluateLIC.LIC7(coordinates, kPts, length1));
     }
 
     @Test
     public void testExceptLIC7() {
         // 3 tests for bad input, kPts < 1, kPts > numPoints - 2, numPoints < 3
-        EvaluateLIC eval = new EvaluateLIC();
-
         Point2D[] coordinates1 = {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(1, 0),
@@ -592,7 +565,7 @@ public class EvaluateLICTest {
 
         // kPts < 1
         try {
-            eval.LIC7(coordinates1, kPts1, length1);
+            EvaluateLIC.LIC7(coordinates1, kPts1, length1);
         } catch (AssertionError e) {
             // AssertionError is expected for kPts < 1
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
@@ -600,39 +573,37 @@ public class EvaluateLICTest {
 
         // kPts > numPoints -2
         try {
-            eval.LIC7(coordinates1, kPts2, length1);
+            EvaluateLIC.LIC7(coordinates1, kPts2, length1);
         } catch (AssertionError e) {
             // AssertionError is expected for kPts < 1
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // numPOints < 3
-        assertFalse(eval.LIC7(coordinates2, kPts2, length1));
+        assertFalse(EvaluateLIC.LIC7(coordinates2, kPts2, length1));
     }
 
-  
-  // ---------------------------------------------------- LIC8 ----------------------------------------------------
+
+    // ---------------------------------------------------- LIC8 ----------------------------------------------------
     @Test
     public void testLIC8TrueForTriangleOutsideRadius() {
         //Points that do not fit inside a circle of radius 0.1
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[5];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(2, 3);
         coordinates[2] = new Point2D.Double(5, 1);
         coordinates[3] = new Point2D.Double(7, 4);
         coordinates[4] = new Point2D.Double(10, 2);
-        
+
         int aPts = 1;
         int bPts = 1;
         double radius = 0.1;
-        assertTrue(eval.LIC8(coordinates, aPts, bPts, radius));
+        assertTrue(EvaluateLIC.LIC8(coordinates, aPts, bPts, radius));
     }
 
     @Test
     public void testLIC8FalseForTriangleInsideRadius() {
         //Points that always fit within a circle of radius 10
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[5];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 1);
@@ -642,13 +613,12 @@ public class EvaluateLICTest {
         int aPts = 1;
         int bPts = 1;
         double radius = 10;
-        assertFalse(eval.LIC8(coordinates, aPts, bPts, radius));
+        assertFalse(EvaluateLIC.LIC8(coordinates, aPts, bPts, radius));
     }
 
     @Test
     public void testLIC8FalseForInsufficientPoints() {
         //Only 4 points (condition requires 5)
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[4];
         coordinates[0] = new Point2D.Double(0, 0);
         coordinates[1] = new Point2D.Double(1, 1);
@@ -657,12 +627,11 @@ public class EvaluateLICTest {
         int aPts = 1;
         int bPts = 1;
         double radius = 0.1;
-        assertFalse(eval.LIC8(coordinates, aPts, bPts, radius));
+        assertFalse(EvaluateLIC.LIC8(coordinates, aPts, bPts, radius));
     }
 
     @Test
     public void testExceptLIC8() {
-        EvaluateLIC eval = new EvaluateLIC();
         // 3 tests for bad inputs, gPts < 1, gPts > numPoints - 2, NUMPOINTS < 3
         Point2D[] coordinates = {
                 new Point2D.Double(-1, -1),
@@ -677,24 +646,24 @@ public class EvaluateLICTest {
         int bPts = 0;
         int aPts1 = 8;
         double radius = 0.1;
-        
+
 
         // aPts < 1
         try {
-            eval.LIC8(coordinates, aPts, bPts, radius);
+            EvaluateLIC.LIC8(coordinates, aPts, bPts, radius);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // bPts < 1
         try {
-            eval.LIC8(coordinates, aPts, bPts, radius);
+            EvaluateLIC.LIC8(coordinates, aPts, bPts, radius);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
         // bPts + aPts < numpoints
         try {
-            eval.LIC8(coordinates, aPts1, bPts, radius);
+            EvaluateLIC.LIC8(coordinates, aPts1, bPts, radius);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
@@ -704,48 +673,44 @@ public class EvaluateLICTest {
 
     @Test
     public void testLIC9Coincide() {
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[100];
         Arrays.fill(coordinates, new Point2D.Double(0, 0));
-        assertFalse(eval.LIC9(coordinates, 1, 1, 0.001));
+        assertFalse(EvaluateLIC.LIC9(coordinates, 1, 1, 0.001));
         // epsilon = PI means that if any 3 valid points exists, then it should return, however not if they intersect
-        assertFalse(eval.LIC9(coordinates, 1, 1, -Math.PI));
-        assertFalse(eval.LIC9(coordinates, 10, 10, -1000));
+        assertFalse(EvaluateLIC.LIC9(coordinates, 1, 1, -Math.PI));
+        assertFalse(EvaluateLIC.LIC9(coordinates, 10, 10, -1000));
     }
 
     @Test
     public void testLIC9Any() {
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[100];
         Arrays.fill(coordinates, new Point2D.Double(0, 0));
         coordinates[10] = new Point2D.Double(1.0, 1.0);
         // will always find something, no matter the input (besides Coincide)
-        assertTrue(eval.LIC9(coordinates, 1, 1, -10000.0));
+        assertTrue(EvaluateLIC.LIC9(coordinates, 1, 1, -10000.0));
         // the point is 0deg so any eps < pi works
-        assertTrue(eval.LIC9(coordinates, 1, 1, 0.0));
+        assertTrue(EvaluateLIC.LIC9(coordinates, 1, 1, 0.0));
         // always false, as eps is too large
-        assertFalse(eval.LIC9(coordinates, 1, 1, Math.PI + 1.0));
+        assertFalse(EvaluateLIC.LIC9(coordinates, 1, 1, Math.PI + 1.0));
     }
 
     @Test
     public void testLIC9_90deg() {
-        EvaluateLIC eval = new EvaluateLIC();
         Point2D[] coordinates = new Point2D.Double[5];
         coordinates[0] = new Point2D.Double(0.0, 0.0);
         coordinates[2] = new Point2D.Double(1.0, 0.0);
         coordinates[4] = new Point2D.Double(1.0, 1.0);
         coordinates[1] = new Point2D.Double(1.0, 1.0);
         coordinates[3] = new Point2D.Double(1.0, 1.0);
-        assertTrue(eval.LIC9(coordinates, 1, 1, 0.0));
-        assertFalse(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 + 0.1));
-        assertTrue(eval.LIC9(coordinates, 1, 1, Math.PI / 2.0 - 0.1));
+        assertTrue(EvaluateLIC.LIC9(coordinates, 1, 1, 0.0));
+        assertFalse(EvaluateLIC.LIC9(coordinates, 1, 1, Math.PI / 2.0 + 0.1));
+        assertTrue(EvaluateLIC.LIC9(coordinates, 1, 1, Math.PI / 2.0 - 0.1));
     }
 
     // ---------------------------------------------------- LIC10 ----------------------------------------------------
     @Test
     public void testLIC10positive() {
-        EvaluateLIC eval = new EvaluateLIC();
-        // Positive input points 
+        // Positive input points
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(5, 5),
@@ -761,13 +726,12 @@ public class EvaluateLICTest {
         double area1 = 99.9;
         double area2 = 62;
 
-        assertTrue(eval.LIC10(coordinates, ePts1, fPts, area1));
-        assertTrue(eval.LIC10(coordinates, ePts2, fPts, area2));
+        assertTrue(EvaluateLIC.LIC10(coordinates, ePts1, fPts, area1));
+        assertTrue(EvaluateLIC.LIC10(coordinates, ePts2, fPts, area2));
     }
 
     @Test
     public void testLIC10Min() {
-        EvaluateLIC eval = new EvaluateLIC();
         // positive and negative minimum possible input, numPoints = 5
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
@@ -781,13 +745,12 @@ public class EvaluateLICTest {
         double area1 = 3;
         double area2 = 4;
 
-        assertTrue(eval.LIC10(coordinates, ePts, fPts, area1));
-        assertFalse(eval.LIC10(coordinates, ePts, fPts, area2));
+        assertTrue(EvaluateLIC.LIC10(coordinates, ePts, fPts, area1));
+        assertFalse(EvaluateLIC.LIC10(coordinates, ePts, fPts, area2));
     }
 
     @Test
     public void testLIC10Neagtive() {
-        EvaluateLIC eval = new EvaluateLIC();
         // negative input max area = 13.5, with edge area = area1
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
@@ -802,15 +765,14 @@ public class EvaluateLICTest {
         double area1 = 14;
         double area2 = 13.5;
 
-        assertFalse(eval.LIC10(coordinates, ePts, fPts, area1));
-        assertFalse(eval.LIC10(coordinates, ePts, fPts, area2));
+        assertFalse(EvaluateLIC.LIC10(coordinates, ePts, fPts, area1));
+        assertFalse(EvaluateLIC.LIC10(coordinates, ePts, fPts, area2));
 
     }
 
     @Test
     public void testLIC10NeagtiveCo() {
-        EvaluateLIC eval = new EvaluateLIC();
-        // negative coolinear input
+        // negative collinear input
         Point2D[] coordinates = {
                 new Point2D.Double(-1, -1),
                 new Point2D.Double(0, 0),
@@ -823,12 +785,11 @@ public class EvaluateLICTest {
         int fPts = 1;
         double area1 = 0.1;
 
-        assertFalse(eval.LIC10(coordinates, ePts, fPts, area1));
+        assertFalse(EvaluateLIC.LIC10(coordinates, ePts, fPts, area1));
     }
 
     @Test
     public void testExceptLIC10() {
-        EvaluateLIC eval = new EvaluateLIC();
         // 4 tests for bad inputs, ePts < 1, fPts < 1, ePts + fPts > numPoints - 3, NUMPOINTS < 5
         Point2D[] coordinates = {
                 new Point2D.Double(-1, -1),
@@ -856,33 +817,32 @@ public class EvaluateLICTest {
 
         // ePts < 1
         try {
-            assertFalse(eval.LIC10(coordinates, ePts1, fPts2, area1));
+            assertFalse(EvaluateLIC.LIC10(coordinates, ePts1, fPts2, area1));
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // fPts < 1
         try {
-            assertFalse(eval.LIC10(coordinates, ePts2, fPts1, area1));
+            assertFalse(EvaluateLIC.LIC10(coordinates, ePts2, fPts1, area1));
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // ePts + fPts > numPoints - 3
         try {
-            assertFalse(eval.LIC10(coordinates, ePts3, fPts3, area1));
+            assertFalse(EvaluateLIC.LIC10(coordinates, ePts3, fPts3, area1));
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // NUMPOINTS < 5
-        assertFalse(eval.LIC10(coordinatesShort, ePts2, fPts2, area1));
+        assertFalse(EvaluateLIC.LIC10(coordinatesShort, ePts2, fPts2, area1));
     }
 
     // ---------------------------------------------------- LIC11 ----------------------------------------------------
     @Test
     public void testLIC11positive() {
-        EvaluateLIC eval = new EvaluateLIC();
         // Positive input points, checks multiple cases including when j is last, and when i is first in the array
         Point2D[] coordinates = {
                 new Point2D.Double(11, 0),
@@ -895,14 +855,13 @@ public class EvaluateLICTest {
         int gPts2 = 2;
         int gPts3 = 3; // Maximum valid gPts for these points
 
-        assertTrue(eval.LIC11(coordinates, gPts1));
-        assertTrue(eval.LIC11(coordinates, gPts2));
-        assertTrue(eval.LIC11(coordinates, gPts3));
+        assertTrue(EvaluateLIC.LIC11(coordinates, gPts1));
+        assertTrue(EvaluateLIC.LIC11(coordinates, gPts2));
+        assertTrue(EvaluateLIC.LIC11(coordinates, gPts3));
     }
 
     @Test
     public void testLIC11NegativeLarge() {
-        EvaluateLIC eval = new EvaluateLIC();
         // Large array with negative input points
         Point2D[] coordinates = new Point2D[1000];
 
@@ -912,12 +871,11 @@ public class EvaluateLICTest {
         }
         int gPts = 10;
 
-        assertFalse(eval.LIC11(coordinates, gPts));
+        assertFalse(EvaluateLIC.LIC11(coordinates, gPts));
     }
 
     @Test
     public void testLIC11negative() {
-        EvaluateLIC eval = new EvaluateLIC();
         // Negative input points, checks multiple cases including when j is last, and when i is first in the array
         Point2D[] coordinates = {
                 new Point2D.Double(-1, 0),
@@ -930,14 +888,13 @@ public class EvaluateLICTest {
         int gPts2 = 2;
         int gPts3 = 3; // Maximum valid gPts for these points
 
-        assertFalse(eval.LIC11(coordinates, gPts1));
-        assertFalse(eval.LIC11(coordinates, gPts2));
-        assertFalse(eval.LIC11(coordinates, gPts3));
+        assertFalse(EvaluateLIC.LIC11(coordinates, gPts1));
+        assertFalse(EvaluateLIC.LIC11(coordinates, gPts2));
+        assertFalse(EvaluateLIC.LIC11(coordinates, gPts3));
     }
 
     @Test
     public void testLIC11negativeMin() {
-        EvaluateLIC eval = new EvaluateLIC();
         // Negative input numpoints = 2
         Point2D[] coordinates = {
                 new Point2D.Double(-1, 0),
@@ -946,12 +903,11 @@ public class EvaluateLICTest {
         };
         int gPts1 = 1;
 
-        assertFalse(eval.LIC11(coordinates, gPts1));
+        assertFalse(EvaluateLIC.LIC11(coordinates, gPts1));
     }
 
     @Test
     public void testExceptLIC11() {
-        EvaluateLIC eval = new EvaluateLIC();
         // 3 tests for bad inputs, gPts < 1, gPts > numPoints - 2, NUMPOINTS < 3
         Point2D[] coordinates = {
                 new Point2D.Double(-1, -1),
@@ -968,127 +924,114 @@ public class EvaluateLICTest {
         int gPts2 = 5;
 
 
-
         // gPts < 1
         try {
-            assertFalse(eval.LIC11(coordinates, gPts1));
+            assertFalse(EvaluateLIC.LIC11(coordinates, gPts1));
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // gPts > numPoints - 2
         try {
-            assertFalse(eval.LIC11(coordinates, gPts2));
+            assertFalse(EvaluateLIC.LIC11(coordinates, gPts2));
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
     }
-  
-  // ---------------------------------------------------- LIC12 ----------------------------------------------------
+
+    // ---------------------------------------------------- LIC12 ----------------------------------------------------
     @Test
     public void testPositiveLIC12() {
-        EvaluateLIC eval = new EvaluateLIC();
-        // Positive input points 
+        // Positive input points
         Point2D[] coordinates = {
-            new Point2D.Double(0, 0), 
-            new Point2D.Double(5, 0), 
-            new Point2D.Double(11, 0), 
-            new Point2D.Double(6, 0),
-            new Point2D.Double(-1, 0),
-            new Point2D.Double(0, 0)
+                new Point2D.Double(0, 0),
+                new Point2D.Double(5, 0),
+                new Point2D.Double(11, 0),
+                new Point2D.Double(6, 0),
+                new Point2D.Double(-1, 0),
+                new Point2D.Double(0, 0)
         };
-        double length1 = 10;
         int kPts1 = 1;
         int kPts2 = 2;
 
-
-        assertTrue(eval.LIC12(coordinates, kPts1, length1));
-        assertTrue(eval.LIC12(coordinates, kPts2, length1));
+        assertTrue(EvaluateLIC.LIC12(coordinates, kPts1, 10, 10));
+        assertTrue(EvaluateLIC.LIC12(coordinates, kPts2, 10, 10));
     }
 
     @Test
     public void testNegativeLIC12() {
-        EvaluateLIC eval = new EvaluateLIC();
-        // Negative input points 
+        // Negative input points
         Point2D[] coordinates = {
-            new Point2D.Double(0, 0), 
-            new Point2D.Double(2, 0), 
-            new Point2D.Double(3, 0), 
-            new Point2D.Double(4, 0),
-            new Point2D.Double(5, 0),
-            new Point2D.Double(-1, 0)
+                new Point2D.Double(0, 0),
+                new Point2D.Double(2, 0),
+                new Point2D.Double(3, 0),
+                new Point2D.Double(4, 0),
+                new Point2D.Double(5, 0),
+                new Point2D.Double(-1, 0)
         };
-        double length1 = 10;
         int kPts1 = 1;
         int kPts2 = 2;
 
-
-        assertFalse(eval.LIC12(coordinates, kPts1, length1));
-        assertFalse(eval.LIC12(coordinates, kPts2, length1));
+        assertFalse(EvaluateLIC.LIC12(coordinates, kPts1, 10, 10));
+        assertFalse(EvaluateLIC.LIC12(coordinates, kPts2, 10, 10));
     }
 
     @Test
     public void testMin() {
-        EvaluateLIC eval = new EvaluateLIC();
-        // Minimun input positive and negative 
+        // Minimun input positive and negative
         Point2D[] coordinates1 = {
-            new Point2D.Double(0, 0), 
-            new Point2D.Double(11, 0), 
-            new Point2D.Double(12, 0), 
+                new Point2D.Double(0, 0),
+                new Point2D.Double(11, 0),
+                new Point2D.Double(12, 0),
         };
         Point2D[] coordinates2 = {
-            new Point2D.Double(0, 0), 
-            new Point2D.Double(2, 0), 
-            new Point2D.Double(3, 0), 
+                new Point2D.Double(0, 0),
+                new Point2D.Double(2, 0),
+                new Point2D.Double(3, 0),
         };
-        double length1 = 10;
         int kPts = 0;
 
-
-        assertTrue(eval.LIC12(coordinates1, kPts, length1));
-        assertFalse(eval.LIC12(coordinates2, kPts, length1));
+        assertTrue(EvaluateLIC.LIC12(coordinates1, kPts, 10, 10));
+        assertFalse(EvaluateLIC.LIC12(coordinates2, kPts, 10, 10));
     }
 
 
     @Test
     public void testExceptLIC12() {
-        EvaluateLIC eval = new EvaluateLIC();
         // 3 tests for bad inputs, lenght1 <0, numPoints < 3
         Point2D[] coordinates = {
-            new Point2D.Double(0, 0), 
-            new Point2D.Double(2, 0)
+                new Point2D.Double(0, 0),
+                new Point2D.Double(2, 0)
         };
         double length1 = -1;
         double length2 = 10;
         int kPts1 = 1;
-        int kPts2 = - 1;
+        int kPts2 = -1;
 
         // negative length1
         try {
-            eval.LIC12(coordinates, kPts1, length1);
+            EvaluateLIC.LIC12(coordinates, kPts1, length1, length2);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // negative kPts
         try {
-            eval.LIC12(coordinates, kPts2, length2);
+            EvaluateLIC.LIC12(coordinates, kPts2, length1, length2);
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
         // numpoints < 3
-        assertFalse(eval.LIC12(coordinates, kPts1, length2));
-    } 
+        assertFalse(EvaluateLIC.LIC12(coordinates, kPts1, length1, length2));
+    }
 
     // ---------------------------------------------------- LIC13 ----------------------------------------------------
-    
- // Tests for LIC13
+
+    // Tests for LIC13
     @Test
     public void testLIC13SameCircle() {
-        // Case whith guaranteed unpassable or guaranteed passable radiuses
-        EvaluateLIC eval = new EvaluateLIC();
-
+        // Case with guaranteed unpassable or guaranteed passable radius's
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 1),
@@ -1096,15 +1039,13 @@ public class EvaluateLICTest {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 0),
         };
-        assertFalse(eval.LIC13(coordinates, 0, 0, 1e10, 0.0));
-        assertTrue(eval.LIC13(coordinates, 0, 0, 0, 1e10));
+        assertFalse(EvaluateLIC.LIC13(coordinates, 0, 0, 1e10, 0.0));
+        assertTrue(EvaluateLIC.LIC13(coordinates, 0, 0, 0, 1e10));
     }
 
     @Test
     public void testLIC13DifferentCircle() {
         // Case where different radiuses are used
-        EvaluateLIC eval = new EvaluateLIC();
-
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 1),
@@ -1113,35 +1054,31 @@ public class EvaluateLICTest {
                 new Point2D.Double(0, 10),
                 new Point2D.Double(10, 10),
         };
-        assertTrue(eval.LIC13(coordinates, 0, 0, 5.0, 1.0));
-        assertFalse(eval.LIC13(coordinates, 0, 0, 5.0, 0.0));
-        assertFalse(eval.LIC13(coordinates, 0, 0, 10.0, 1.0));
+        assertTrue(EvaluateLIC.LIC13(coordinates, 0, 0, 5.0, 1.0));
+        assertFalse(EvaluateLIC.LIC13(coordinates, 0, 0, 5.0, 0.0));
+        assertFalse(EvaluateLIC.LIC13(coordinates, 0, 0, 10.0, 1.0));
     }
 
     @Test
     public void testLIC13StackedPoints() {
         // Case where datapoints are overlapping
-        EvaluateLIC eval = new EvaluateLIC();
-
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 0)
         };
-        assertFalse(eval.LIC13(coordinates, 0, 0, 0.0, 0.0));
+        assertFalse(EvaluateLIC.LIC13(coordinates, 0, 0, 0.0, 0.0));
     }
 
     @Test
     public void testLIC13InvalidInput() {
-        EvaluateLIC eval = new EvaluateLIC();
-
         Point2D[] coordinates1 = {
                 new Point2D.Double(0, 0),
         };
 
         // invalid length for datapoints array
-        assertFalse(eval.LIC13(coordinates1, 0, 0, 0.0, 0.0));
+        assertFalse(EvaluateLIC.LIC13(coordinates1, 0, 0, 0.0, 0.0));
 
         Point2D[] coordinates2 = {
                 new Point2D.Double(0, 0),
@@ -1154,7 +1091,7 @@ public class EvaluateLICTest {
 
         // invalid second radius
         try {
-            eval.LIC13(coordinates2, 0, 0, 0.0, -1.0);
+            EvaluateLIC.LIC13(coordinates2, 0, 0, 0.0, -1.0);
             fail("Should crash");
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
@@ -1164,7 +1101,6 @@ public class EvaluateLICTest {
     // ---------------------------------------------------- LIC14 ----------------------------------------------------
     @Test
     public void testLIC14SameTriangle() {
-        EvaluateLIC eval = new EvaluateLIC();
 
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
@@ -1173,13 +1109,12 @@ public class EvaluateLICTest {
                 new Point2D.Double(0, 0),
                 new Point2D.Double(0, 0),
         };
-        assertFalse(eval.LIC14(coordinates, 0, 0, 1e10, 0.0));
-        assertTrue(eval.LIC14(coordinates, 0, 0, 0.0, 1e10));
+        assertFalse(EvaluateLIC.LIC14(coordinates, 0, 0, 1e10, 0.0));
+        assertTrue(EvaluateLIC.LIC14(coordinates, 0, 0, 0.0, 1e10));
     }
 
     @Test
     public void testLIC14DifferentTriangle() {
-        EvaluateLIC eval = new EvaluateLIC();
 
         Point2D[] coordinates = {
                 new Point2D.Double(0, 0),
@@ -1189,19 +1124,18 @@ public class EvaluateLICTest {
                 new Point2D.Double(0, 10),
                 new Point2D.Double(10, 10),
         };
-        assertTrue(eval.LIC14(coordinates, 0, 0, 5.0, 1.0));
-        assertFalse(eval.LIC14(coordinates, 0, 0, 5.0, 0.0));
+        assertTrue(EvaluateLIC.LIC14(coordinates, 0, 0, 5.0, 1.0));
+        assertFalse(EvaluateLIC.LIC14(coordinates, 0, 0, 5.0, 0.0));
     }
 
     @Test
     public void testLIC14InvalidInput() {
-        EvaluateLIC eval = new EvaluateLIC();
 
         Point2D[] coordinates1 = {
                 new Point2D.Double(0, 0),
         };
 
-        assertFalse(eval.LIC14(coordinates1, 0, 0, 0.0, 0.0));
+        assertFalse(EvaluateLIC.LIC14(coordinates1, 0, 0, 0.0, 0.0));
 
         Point2D[] coordinates2 = {
                 new Point2D.Double(0, 0),
@@ -1212,7 +1146,7 @@ public class EvaluateLICTest {
                 new Point2D.Double(0, 0),
         };
         try {
-            eval.LIC14(coordinates2, 0, 0, 0.0, -1.0);
+            EvaluateLIC.LIC14(coordinates2, 0, 0, 0.0, -1.0);
             fail("Should crash");
         } catch (AssertionError e) {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
