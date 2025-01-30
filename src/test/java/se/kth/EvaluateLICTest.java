@@ -622,8 +622,9 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(5, 1);
         coordinates[3] = new Point2D.Double(7, 4);
         coordinates[4] = new Point2D.Double(10, 2);
+        
         int aPts = 1;
-        int bPts = 2;
+        int bPts = 1;
         double radius = 0.1;
         assertTrue(eval.LIC8(coordinates, aPts, bPts, radius));
     }
@@ -639,7 +640,7 @@ public class EvaluateLICTest {
         coordinates[3] = new Point2D.Double(3, 1);
         coordinates[4] = new Point2D.Double(4, 0);
         int aPts = 1;
-        int bPts = 2;
+        int bPts = 1;
         double radius = 10;
         assertFalse(eval.LIC8(coordinates, aPts, bPts, radius));
     }
@@ -654,9 +655,49 @@ public class EvaluateLICTest {
         coordinates[2] = new Point2D.Double(2, 0);
         coordinates[3] = new Point2D.Double(3, 1);
         int aPts = 1;
-        int bPts = 2;
+        int bPts = 1;
         double radius = 0.1;
         assertFalse(eval.LIC8(coordinates, aPts, bPts, radius));
+    }
+
+    @Test
+    public void testExceptLIC8() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 3 tests for bad inputs, gPts < 1, gPts > numPoints - 2, NUMPOINTS < 3
+        Point2D[] coordinates = {
+                new Point2D.Double(-1, -1),
+                new Point2D.Double(0, 0),
+                new Point2D.Double(1, 1),
+                new Point2D.Double(2, 2),
+                new Point2D.Double(1, 1),
+                new Point2D.Double(1, 1)
+        };
+
+        int aPts = 0;
+        int bPts = 0;
+        int aPts1 = 8;
+        double radius = 0.1;
+        
+
+        // aPts < 1
+        try {
+            eval.LIC8(coordinates, aPts, bPts, radius);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // bPts < 1
+        try {
+            eval.LIC8(coordinates, aPts, bPts, radius);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+        // bPts + aPts < numpoints
+        try {
+            eval.LIC8(coordinates, aPts1, bPts, radius);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
     }
 
     // ---------------------------------------------------- LIC9 ----------------------------------------------------
