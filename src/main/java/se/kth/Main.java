@@ -7,21 +7,22 @@ public class Main {
         Point2D[] coordinates = convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates);
 
         // Conditions Met Vector (CMV)
+        EvaluateLIC eval = new EvaluateLIC();
         globals.cmv[0] = EvaluateLIC.LIC0(coordinates, globals.parameters.LENGTH1);
         globals.cmv[1] = EvaluateLIC.LIC1(coordinates, globals.parameters.RADIUS1);
-        globals.cmv[2] = new EvaluateLIC().LIC2(coordinates, globals.parameters.EPSILON);
-        globals.cmv[3] = new EvaluateLIC().LIC3(coordinates, globals.parameters.AREA1);
-        globals.cmv[4] = new EvaluateLIC().LIC4(coordinates, globals.parameters.Q_PTS, globals.parameters.QUADS);
-        globals.cmv[5] = new EvaluateLIC().LIC5(coordinates);
-        globals.cmv[6] = new EvaluateLIC().LIC6(coordinates, globals.parameters.N_PTS, globals.parameters.DIST);
-        globals.cmv[7] = new EvaluateLIC().LIC7(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH1);
-        globals.cmv[8] = false;
-        globals.cmv[9] = new EvaluateLIC().LIC9(coordinates, globals.parameters.C_PTS, globals.parameters.D_PTS, globals.parameters.EPSILON);
-        globals.cmv[10] = new EvaluateLIC().LIC10(coordinates, globals.parameters.E_PTS, globals.parameters.F_PTS, globals.parameters.AREA1);
-        globals.cmv[11] = new EvaluateLIC().LIC11(coordinates, globals.parameters.G_PTS);
-        globals.cmv[12] = false;
-        globals.cmv[13] = false;
-        globals.cmv[14] = false;
+        globals.cmv[2] = eval.LIC2(coordinates, globals.parameters.EPSILON);
+        globals.cmv[3] = eval.LIC3(coordinates, globals.parameters.AREA1);
+        globals.cmv[4] = eval.LIC4(coordinates, globals.parameters.Q_PTS, globals.parameters.QUADS);
+        globals.cmv[5] = eval.LIC5(coordinates);
+        globals.cmv[6] = eval.LIC6(coordinates, globals.parameters.N_PTS, globals.parameters.DIST);
+        globals.cmv[7] = eval.LIC7(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH1);
+        globals.cmv[8] = eval.LIC8(coordinates, globals.parameters.A_PTS, globals.parameters.B_PTS, globals.parameters.RADIUS1);
+        globals.cmv[9] = eval.LIC9(coordinates, globals.parameters.C_PTS, globals.parameters.D_PTS, globals.parameters.EPSILON);
+        globals.cmv[10] = eval.LIC10(coordinates, globals.parameters.E_PTS, globals.parameters.F_PTS, globals.parameters.AREA1);
+        globals.cmv[11] = eval.LIC11(coordinates, globals.parameters.G_PTS);
+        globals.cmv[12] = eval.LIC12(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH2);
+        globals.cmv[13] = eval.LIC13(coordinates, globals.parameters.A_PTS,globals.parameters.B_PTS,globals.parameters.RADIUS1,globals.parameters.RADIUS2);
+        globals.cmv[14] = eval.LIC14(coordinates, globals.parameters.E_PTS,globals.parameters.F_PTS,globals.parameters.AREA1,globals.parameters.AREA2);
         
         // Preliminary Unlocking Matrix (PUM)
         for (int i = 0; i < 15; i++) {
