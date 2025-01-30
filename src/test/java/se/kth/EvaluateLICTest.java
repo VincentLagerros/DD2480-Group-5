@@ -940,9 +940,102 @@ public class EvaluateLICTest {
             assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
         }
 
+
+        // negative kPts
+        try {
+            eval.LIC12(coordinates, kPts2, length2);
+        } catch (AssertionError e) {
+            assertTrue(e.getMessage() == null || e.getMessage().contains("assert"));
+        }
+
+        // numpoints < 3
+        assertFalse(eval.LIC12(coordinates, kPts1, length2));
         // NUMPOINTS < 5
         assertFalse(eval.LIC11(coordinatesShort, gPts2));
     }
+  
+  // ---------------------------------------------------- LIC12 ----------------------------------------------------
+    @Test
+    public void testPositiveLIC12() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Positive input points 
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(5, 0), 
+            new Point2D.Double(11, 0), 
+            new Point2D.Double(6, 0),
+            new Point2D.Double(-1, 0),
+            new Point2D.Double(0, 0)
+        };
+        double length1 = 10;
+        int kPts1 = 1;
+        int kPts2 = 2;
+
+
+        assertTrue(eval.LIC12(coordinates, kPts1, length1));
+        assertTrue(eval.LIC12(coordinates, kPts2, length1));
+    }
+
+    @Test
+    public void testNegativeLIC12() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Negative input points 
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0), 
+            new Point2D.Double(3, 0), 
+            new Point2D.Double(4, 0),
+            new Point2D.Double(5, 0),
+            new Point2D.Double(-1, 0)
+        };
+        double length1 = 10;
+        int kPts1 = 1;
+        int kPts2 = 2;
+
+
+        assertFalse(eval.LIC12(coordinates, kPts1, length1));
+        assertFalse(eval.LIC12(coordinates, kPts2, length1));
+    }
+
+    @Test
+    public void testMin() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // Minimun input positive and negative 
+        Point2D[] coordinates1 = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(11, 0), 
+            new Point2D.Double(12, 0), 
+        };
+        Point2D[] coordinates2 = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0), 
+            new Point2D.Double(3, 0), 
+        };
+        double length1 = 10;
+        int kPts = 0;
+
+
+        assertTrue(eval.LIC12(coordinates1, kPts, length1));
+        assertFalse(eval.LIC12(coordinates2, kPts, length1));
+    }
+
+
+    @Test
+    public void testExceptLIC12() {
+        EvaluateLIC eval = new EvaluateLIC();
+        // 3 tests for bad inputs, lenght1 <0, numPoints < 3
+        Point2D[] coordinates = {
+            new Point2D.Double(0, 0), 
+            new Point2D.Double(2, 0)
+        };
+        double length1 = -1;
+        double length2 = 10;
+        int kPts1 = 1;
+        int kPts2 = - 1;
+
+        // negative length1
+        try {
+            eval.LIC12(coordinates, kPts1, length1);
 
     // ---------------------------------------------------- LIC13 ----------------------------------------------------
     
