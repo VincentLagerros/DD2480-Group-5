@@ -3,27 +3,26 @@ package se.kth;
 import java.awt.geom.Point2D;
 
 public class Main {
-    public static void DECIDE(GlobalDeclarations.Globals globals){
+    public static void DECIDE(GlobalDeclarations.Globals globals) {
         Point2D[] coordinates = convertToPoint2DArray(globals.numPoints, globals.xCoordinates, globals.yCoordinates);
 
         // Conditions Met Vector (CMV)
-        EvaluateLIC eval = new EvaluateLIC();
         globals.cmv[0] = EvaluateLIC.LIC0(coordinates, globals.parameters.LENGTH1);
         globals.cmv[1] = EvaluateLIC.LIC1(coordinates, globals.parameters.RADIUS1);
-        globals.cmv[2] = eval.LIC2(coordinates, globals.parameters.EPSILON);
-        globals.cmv[3] = eval.LIC3(coordinates, globals.parameters.AREA1);
-        globals.cmv[4] = eval.LIC4(coordinates, globals.parameters.Q_PTS, globals.parameters.QUADS);
-        globals.cmv[5] = eval.LIC5(coordinates);
-        globals.cmv[6] = eval.LIC6(coordinates, globals.parameters.N_PTS, globals.parameters.DIST);
-        globals.cmv[7] = eval.LIC7(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH1);
-        globals.cmv[8] = eval.LIC8(coordinates, globals.parameters.A_PTS, globals.parameters.B_PTS, globals.parameters.RADIUS1);
-        globals.cmv[9] = eval.LIC9(coordinates, globals.parameters.C_PTS, globals.parameters.D_PTS, globals.parameters.EPSILON);
-        globals.cmv[10] = eval.LIC10(coordinates, globals.parameters.E_PTS, globals.parameters.F_PTS, globals.parameters.AREA1);
-        globals.cmv[11] = eval.LIC11(coordinates, globals.parameters.G_PTS);
-        globals.cmv[12] = eval.LIC12(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH2);
-        globals.cmv[13] = eval.LIC13(coordinates, globals.parameters.A_PTS,globals.parameters.B_PTS,globals.parameters.RADIUS1,globals.parameters.RADIUS2);
-        globals.cmv[14] = eval.LIC14(coordinates, globals.parameters.E_PTS,globals.parameters.F_PTS,globals.parameters.AREA1,globals.parameters.AREA2);
-        
+        globals.cmv[2] = EvaluateLIC.LIC2(coordinates, globals.parameters.EPSILON);
+        globals.cmv[3] = EvaluateLIC.LIC3(coordinates, globals.parameters.AREA1);
+        globals.cmv[4] = EvaluateLIC.LIC4(coordinates, globals.parameters.Q_PTS, globals.parameters.QUADS);
+        globals.cmv[5] = EvaluateLIC.LIC5(coordinates);
+        globals.cmv[6] = EvaluateLIC.LIC6(coordinates, globals.parameters.N_PTS, globals.parameters.DIST);
+        globals.cmv[7] = EvaluateLIC.LIC7(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH1);
+        globals.cmv[8] = EvaluateLIC.LIC8(coordinates, globals.parameters.A_PTS, globals.parameters.B_PTS, globals.parameters.RADIUS1);
+        globals.cmv[9] = EvaluateLIC.LIC9(coordinates, globals.parameters.C_PTS, globals.parameters.D_PTS, globals.parameters.EPSILON);
+        globals.cmv[10] = EvaluateLIC.LIC10(coordinates, globals.parameters.E_PTS, globals.parameters.F_PTS, globals.parameters.AREA1);
+        globals.cmv[11] = EvaluateLIC.LIC11(coordinates, globals.parameters.G_PTS);
+        globals.cmv[12] = EvaluateLIC.LIC12(coordinates, globals.parameters.K_PTS, globals.parameters.LENGTH1, globals.parameters.LENGTH2);
+        globals.cmv[13] = EvaluateLIC.LIC13(coordinates, globals.parameters.A_PTS, globals.parameters.B_PTS, globals.parameters.RADIUS1, globals.parameters.RADIUS2);
+        globals.cmv[14] = EvaluateLIC.LIC14(coordinates, globals.parameters.E_PTS, globals.parameters.F_PTS, globals.parameters.AREA1, globals.parameters.AREA2);
+
         // Preliminary Unlocking Matrix (PUM)
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -58,7 +57,7 @@ public class Main {
                 break;
             }
         }
-         
+
         // Print Launch Decision
         System.out.println(globals.launchDecision ? "YES" : "NO");
     }
@@ -66,14 +65,15 @@ public class Main {
     private static Point2D[] convertToPoint2DArray(int numPoints, double[] xCoordinates, double[] yCoordinates) {
         assert xCoordinates.length == yCoordinates.length;
         Point2D[] coordinates = new Point2D.Double[numPoints];
-        for (int i = 0; i < numPoints; i++){
+        for (int i = 0; i < numPoints; i++) {
             coordinates[i] = new Point2D.Double(xCoordinates[i], yCoordinates[i]);
-        } 
+        }
         return coordinates;
     }
+
     public static void main(String[] args) {
         GlobalDeclarations.Globals globals = new GlobalDeclarations.Globals();
-        
+
         //init all globals
         globals.numPoints = 5;
         globals.xCoordinates = new double[]{0, 0, 0, 0, 0};
@@ -96,5 +96,5 @@ public class Main {
         DECIDE(globals);
     }
 
-   
+
 }

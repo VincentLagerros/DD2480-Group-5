@@ -85,5 +85,4 @@ public class GlobalDeclarations {
             return CompType.GT;
         }
     }
-
 }
