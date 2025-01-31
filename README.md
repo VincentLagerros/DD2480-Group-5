@@ -27,31 +27,6 @@ This project implements a **Launch Interceptor Program** in Java. Key features i
 
 ---
 
-### Continuous Integration
-The goal of this assignment is to master the core principles of **Continuous Integration (CI)** by implementing a small CI server. 
-
----
-
-### Code Complexity & Coverage
-The goal of this assignment is to explore **complexity and coverage metrics** by:
-- Experimenting with tools to measure code complexity and coverage.
-- Understanding the benefits and limitations of these metrics.
-- Enhancing or creating test cases to improve **statement** or **branch coverage**.
-
-These tasks will be performed on an open-source project of reasonable size and complexity.
-
----
-
-### Issue Resolution
-The goal of this assignment is to understand the complexity of issue resolution in a real project. Grading focuses on:
-- The process followed to carry out the work.
-- The quality of the work.
-- Reflections on the work.
-
-Even a partially resolved issue can receive full marks if it is well-managed and documented.
-
----
-
 ## License
 This project is licensed under the **BSD 2-Clause License**. Permissions, conditions, and limitations include:
 - **Permissions**: Private and commercial use, modification, and distribution.
