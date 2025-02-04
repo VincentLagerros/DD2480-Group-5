@@ -1,4 +1,4 @@
-# DD2480-Group-5
+# DD2480-Group-5   
 This repository includes the assignment DECIDE in the course *DD2480 - Fundamentals of Software Engineering*. 
 
 ---
